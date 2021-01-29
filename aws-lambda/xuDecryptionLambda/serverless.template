@@ -1,0 +1,16 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Description": "An AWS Serverless Application.",
+  "Resources": {
+    "XUColumnDecryption": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "xuDecryptionLambda::xuDecryptionLambda.Function::FunctionHandler",
+        "Runtime": "dotnetcore3.1",
+        "CodeUri": "",
+        "Timeout": 30,
+      }
+    }
+  }
+}

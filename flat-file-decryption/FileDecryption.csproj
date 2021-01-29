@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Theobald.Decryption.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\Theobald Software\Theobald.Decryption.Common.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

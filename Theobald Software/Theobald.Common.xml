@@ -1,0 +1,1606 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Theobald.Common</name>
+    </assembly>
+    <members>
+        <member name="T:Theobald.Common.AbapString">
+            <summary>
+            Contains methods for parsing string representations of ABAP values
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.AbapString.ParseUnsignedInteger(System.String)">
+            <summary>
+            Parses a string representation of an ABAP unsigned integer
+            </summary>
+            <param name="value">The string representation of the ABAP unsigned integer</param>
+            <returns>The typed value of the string representation</returns>
+        </member>
+        <member name="M:Theobald.Common.AbapString.ParseSignedInteger(System.String)">
+            <summary>
+            Parses a string representation of an ABAP signed integer
+            </summary>
+            <param name="value">The string representation of the ABAP signed integer</param>
+            <returns>The typed value of the string representation</returns>
+        </member>
+        <member name="M:Theobald.Common.AbapString.ParsePackedNumber(System.String)">
+            <summary>
+            Parses a string representation of an ABAP packed number
+            </summary>
+            <param name="value">The string representation of the ABAP packed number</param>
+            <returns>The typed value of the string representation</returns>
+        </member>
+        <member name="M:Theobald.Common.AbapString.ParseFloatingPoint(System.String)">
+            <summary>
+            Parses a string representation of an ABAP floating point value 
+            </summary>
+            <param name="value">The string representation of the ABAP floating point value</param>
+            <returns>The typed value of the string representation</returns>
+        </member>
+        <member name="M:Theobald.Common.AbapString.ParseByteSequence(System.String)">
+            <summary>
+            Parses a string representation of an ABAP byte sequence
+            </summary>
+            <param name="value">The string representation of the ABAP byte sequence</param>
+            <returns>The typed value of the string representation</returns>
+        </member>
+        <member name="M:Theobald.Common.AbapString.ParseBoolean(System.String)">
+            <summary>
+            Parses a string representation of an ABAP boolean
+            </summary>
+            <param name="value">The string representation of the ABAP boolean</param>
+            <returns>The typed value of the string representation</returns>
+        </member>
+        <member name="M:Theobald.Common.AbapString.TryParseTime(System.String,System.TimeSpan@)">
+            <summary>
+            Try to parse a string representation of an ABAP TIMS (time)
+            </summary>
+            <param name="value">The string representation of the ABAP Time (TIMS)</param>
+            <param name="timeSpanVal">If the parser succeeds, this variable shall contain a 
+            TimeSpan between 00:00:00 and 23:59:59, otherwise TimeSpan.Zero </param>
+            <returns>
+            True if the parser succeeds, false otherwise
+            </returns>
+        </member>
+        <member name="M:Theobald.Common.AbapString.Parse(System.String,Theobald.Common.AbapType)">
+            <summary>
+            Parses an ABAP string representation
+            </summary>
+            <param name="value">The string representation</param>
+            <param name="abapType">The ABAP type of the representation</param>
+            <returns>The typed value of the string representation</returns>
+        </member>
+        <member name="M:Theobald.Common.AbapString.ReplaceStar(System.String,System.String)">
+            <summary>
+            Replaces the star in string representation of SAP table values which are
+            too big for RFC_READ_TABLE
+            </summary>
+            <param name="value">The string representation of the SAP table value</param>
+            <param name="starReplacement">The replacement for the star</param>
+            <returns>The string representation where the star has been replaced</returns>
+        </member>
+        <member name="F:Theobald.Common.AbapType.None">
+            <summary>
+            ABAP type undefined
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.OneByteInteger">
+            <summary>
+            Unsigned integer, 1 byte (predefined type b, DDIC type INT1)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.TwoByteInteger">
+            <summary>
+            Signed integer, 2 bytes (predefined type s, DDIC type INT2)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.FourByteInteger">
+            <summary>
+            Signed integer, 4 bytes (predefined type i, DDIC type INT4)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.EightByteInteger">
+            <summary>
+            Signed integer, 8 bytes (predefined type int8, DDIC type INT8)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.FloatingPoint">
+            <summary>
+            Floating point number, 8 bytes (predefined type f, DDIC type FLTP)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.ByteSequence">
+            <summary>
+            Uninterpreted byte sequence, 1 - 65,535 bytes (predefined type x, DDIC type RAW)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.CharacterString">
+            <summary>
+            Character string, 1 - 65,535 characters (predefined type c, DDIC type CHAR)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.NumericCharacterString">
+            <summary>
+            Character string (only digits), 1 - 65,535 characters (predefined type n, DDIC type NUMC)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.Date">
+            <summary>
+            Date field (YYYYMMDD), 8 characters (predefined type D, DDIC type DATS)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.Time">
+            <summary>
+            Time field (HHMMSS), 6 characters (predefined type T, DDIC type TIMS)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.PackedNumber">
+            <summary>
+            Packed number (decimal representation), 1 - 16 bytes (predefined type P, DDIC type DEC)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.ByteSequenceOfVariableLength">
+            <summary>
+            Uninterpreted byte sequence, variable length (predefined type xstring, DDIC type RAWSTRING)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.CharacterStringOfVariableLength">
+            <summary>
+            Character string, variable length (predefined type string, DDIC type STRING)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.DecimalFloatingPoint16">
+            <summary>
+            Decimal floating point number with 16 places (predefined type decfloat16, DDIC type DF16_DEC, DF16_RAW, DF16_SCL)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.DecimalFloatingPoint34">
+            <summary>
+            Decimal floating point number with 34 places (predefined type decfloat16, DDIC type DF34_DEC)
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.AbapType.TimeStamp">
+            <summary>
+            TimeStamp accurate to 100 nanoseconds internally stored as <see cref="F:Theobald.Common.AbapType.EightByteInteger" />
+            (predefined type p, DDIC type UTCLONG)
+            </summary>
+        </member>
+        <member name="T:Theobald.Common.Csv.CsvReader">
+            <summary>
+            Reads the characters provides via FillData() and assembles CSV following RFC4180.
+            </summary>
+            <example> Usage:
+            <code>
+            CsvReader reader = new CsvReader(',');
+            char[] buffer;
+            while (dataAvailable)
+            {
+                ReadCharsFromSource(buffer);
+                reader.FillData(new ArraySegment&lt;char&gt;(buffer));
+                while (reader.MoveNext())
+                {
+                    bool isNewLine = reader.NewLine;
+                    ArraySegment&lt;char&gt; cell = reader.Current;
+                }
+            }
+            List&lt;ArraySegment&lt;char&gt;&gt; lastTokens = reader.Flush();
+            </code>
+            </example>
+        </member>
+        <member name="F:Theobald.Common.Csv.CsvReader.firstLine">
+            <summary>
+            Marks the first line ever read by this reader. Used to count columns and know when to signal a line break.
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.Csv.CsvReader.currentState">
+            <summary>
+            Remembers the state, the reader was in, before going to MoreData mode.
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.Csv.CsvReader.previousState">
+            <summary>
+            indicates whether to ignore empty cells from the cell reader,
+            which occur when transitioning between quote and non quote
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.Csv.CsvReader.cells">
+             <summary>
+             Holds the cells, which were read from the segment.
+             It is used as a FiFo structure.
+            
+             MoveNext() always pulls out the first item.
+             </summary>
+        </member>
+        <member name="P:Theobald.Common.Csv.CsvReader.NewLine">
+            <summary>
+            Indicates if Current marks the first item of a new line.
+            For the first line, this is always false.
+            </summary>
+        </member>
+        <member name="P:Theobald.Common.Csv.CsvReader.Current">
+            <summary>
+            Holds the current item loaded through calling MoveNext() or null if all cells where read.
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvReader.FillData(System.ArraySegment{System.Char})">
+            <summary>
+            (Re)fills the reader with the next chunk of data to parse.
+            </summary>
+            <param name="data"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvReader.ProcessNonQuote">
+            <summary>
+            Handle the cases and circumstances under which a NonQuote token
+            might be read.
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvReader.MoveNext">
+             <summary>
+             Checks if there is a cell to move into the Current property.
+             If not, the parser is reading more of the data if available and
+             then checks again if cells could be assembled.
+            
+             Also writes into NewLine whether the reader passed a line break, when
+             moving to the next cell.
+             </summary>
+             <returns>true if there is a next cell available, false otherwise.</returns>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvReader.Flush">
+             <summary>
+             Call this method if there is no data left to be filled into the reader.
+            
+             It empties the buffer and assumes that all data was passed through the reader,
+             thus the cells being complete.
+             </summary>
+             <returns>the cells for the last line or the last quoted cell.</returns>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvReader.AddCells(System.Collections.Generic.IList{System.ArraySegment{System.Char}})">
+            <summary>
+            We have to copy the cells to a new array to avoid overwriting old ones.
+            </summary>
+            <param name="newCells"></param>
+        </member>
+        <member name="M:Theobald.Common.Encoding.BytesToChars.Decode(System.ArraySegment{System.Byte})">
+            <summary>
+            Consumes all the <paramref name="bytes"/> and decodes them into <see cref="T:System.Char"/>s
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Encoding.CharsToLines.SplitCrLf(System.ArraySegment{System.Char})">
+            <summary>
+            Splits the <paramref name="charsSegment"/> into sub-segments at CRLF newline.
+            <remarks>
+                The CRLFs are not part of the sub-segments.
+                Chars at the end of the segment, that are not followed by a CRLF, are stored in an
+                internal buffer and added to the first line of the next call.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Encoding.CharsToLines.Flush">
+            <summary>
+            Returns the saved characters that didn't make a full line yet.
+            <remarks>This might be useful, if the last line is not followed by a newline</remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Encoding.CharsToQuotes.FillData(System.ArraySegment{System.Char})">
+            <summary>
+            This method should only be called, when State is MoreData.
+            </summary>
+            <param name="newData"></param>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:Theobald.Common.Encoding.CharsToQuotes.MoveNext">
+             <summary>
+            
+             </summary>
+             <returns>The state that was just entered.</returns>
+             <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+        </member>
+        <member name="T:Theobald.Common.Encoding.Gb18030NoPreamble">
+            <summary>
+            In a nutshell, it is the Chinese version of UTF-8
+            </summary>
+        </member>
+        <member name="T:Theobald.Common.Encoding.Gb18030WithPreamble">
+            <summary>
+            In a nutshell, it is the Chinese version of UTF-8
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Encoding.LineToCells.SplitDelimiter(System.ArraySegment{System.Char},System.Char)">
+            <summary>
+            Splits the line into array segments representing the array of cells within that line
+            </summary>
+            <param name="line"></param>
+            <param name="delimiter"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Theobald.Common.Fnv1aHash">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a hash of a string.
+            Can be used as a checksum, or to significantly reduce
+            the probability of collisions when shortening strings.
+            <remarks>
+            Homepage of Landon Curt Noll, the 'N' in FNV:
+            http://www.isthe.com/chongo/tech/comp/fnv/index.html
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Fnv1aHash.Calculate(System.IO.Stream)">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a hash of a stream. 
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Fnv1aHash.Calculate(System.String)">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a hash of a string. 
+            </summary>
+        </member>
+        <member name="T:Theobald.Common.IoHelper">
+            <remarks>
+            The retry methods should only be used in scenarios with low collision probability,
+            because they can starve. Please use a starving-free synchronization mechanism
+            like <see cref="T:System.Threading.Mutex" /> if collisions are likely.
+            </remarks>
+        </member>
+        <member name="F:Theobald.Common.IoHelper.IoError.SharingViolation">
+            <summary>
+            ERROR_SHARING_VIOLATION ("Used by another process.")
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.IoHelper.IoError.FileExists">
+            <summary>
+            ERROR_FILE_EXISTS ("The file exists.")
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.IoHelper.DeleteFileRetry(System.String)">
+            <summary>
+            Tries to delete a file. 
+            If the file is currently in use, waits and retries a few times
+            (deleting files on Windows is not atomic).
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.IoHelper.GetHResult(System.IO.IOException)">
+            <summary>
+            Gets the HRESULT in .NET Framework versions before 4.5
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.IoHelper.OpenFileRetryRead(System.String,System.IO.FileShare)">
+            <summary>
+            Tries to open a file for reading.
+            If the file is currently in use, waits and retries a few times.
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.IoHelper.OpenFileRetryAppend(System.String,System.IO.FileShare)">
+            <summary>
+            Tries to open a file for appending.
+            If the file is currently in use, waits and retries a few times.
+            Creates all directories and subdirectories in the specified path
+            unless they already exist.
+            </summary>
+            <remarks>
+            It is currently unknown what happens, when directories of the path are being
+            created/deleted in parallel.
+            </remarks>
+        </member>
+        <member name="M:Theobald.Common.IoHelper.OpenFileRetryWrite(System.String,System.IO.FileMode,System.IO.FileShare)">
+            <summary>
+            Tries to open a file for writing.
+            If the file is currently in use, waits and retries a few times.
+            Creates all directories and subdirectories in the specified path
+            unless they already exist or the <paramref name="fileMode"/> expects the file to exist.
+            </summary>
+            <remarks>
+            The file could be in use because it is currently being deleted.
+            It is currently unknown what happens, when directories of the path are being
+            created/deleted in parallel.
+            </remarks>
+            <exception cref="T:Theobald.Common.FileExistsException"/>
+        </member>
+        <member name="T:Theobald.Common.NamedList`1">
+            <summary>
+            Represents a generic list of named elements,
+            which can be accessed by name or by index
+            </summary>
+        </member>
+        <member name="T:Theobald.Common.SapLanguageKey">
+            <summary>
+            Converts between 1-character proprietary SAP language keys and
+            2-character ISO 639-1 language keys (also used by SAP)
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.SapLanguageKey.OneToTwoCharKey(System.String)">
+            <summary>
+            Converts an 1-character SAP language key to a 2-character ISO 639-1 language key
+            </summary>
+            <param name="oneCharKey">1-character SAP language key</param>
+            <returns>2-character ISO 639-1 language key</returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Theobald.Common.SapLanguageKey.TwoToOneCharKey(System.String)">
+            <summary>
+            Converts a 2-character ISO 639-1 language key to an 1-character SAP language key
+            </summary>
+            <param name="twoCharKey">2-character ISO 639-1 language key</param>
+            <returns>1-character SAP language key</returns>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="M:Theobald.Common.SapLanguageKey.GetOneCharKey(System.String)">
+            <summary>
+            Returns a matching 1-character SAP language key
+            </summary>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="T:Theobald.Common.StringFilter">
+            <summary>
+            Specialized class for filtering string contents.
+            <remarks>
+                This is especially useful for large amounts of data,
+                e. g. CSV destination in XU.
+                Nobody ran any performance tests yet to check,
+                if this implementation beats compiled Regex.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.StringHelper.TrimEndSpace(System.String)">
+            <summary>
+            Specialized method for removing spaces from the end of a string
+            </summary>
+            <param name="value">string to remove spaces from</param>
+            <returns>s with spaces removed at the end</returns>
+        </member>
+        <member name="M:Theobald.Common.StringHelper.TrimNull(System.String)">
+            <summary>
+            Trims spaces at
+            beginning and end, and replaces empty strings
+            (before and after trimming) with nulls
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.StringHelper.ToUpperTrimNull(System.String)">
+            <summary>
+            Converts a string to uppercase, trims spaces at
+            beginning and end, and replaces empty strings
+            (before and after trimming) with nulls
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.StringHelper.ParseHexString(System.String,System.Byte[],System.Int32)">
+            <summary>
+            Converts a string of hex specifiers to a byte array.
+            Two characters make up one byte, not case-sensitive. 
+            Strings with odd numbers of characters are zero-padded at the beginning.
+            Examples:
+                "AFFE" -> { 0xaf, 0xfe}
+                "2342" -> { 0x23, 0x42 }  
+                "1eee7" -> { 0x01, 0xee, 0xe7 }
+            </summary>
+            <remarks>
+            Reading table QSENDDEST on older systems might return a hex string with
+            an odd number of characters.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Theobald.Common.StringHelper.ParseHexString(System.String)">
+            <summary>
+            Converts a string of hex specifiers to a byte array.
+            Two characters make up one byte, not case-sensitive. 
+            Strings with odd numbers of characters are zero-padded at the beginning.
+            Examples:
+                "AFFE" -> { 0xaf, 0xfe}
+                "2342" -> { 0x23, 0x42 }  
+                "1eee7" -> { 0x01, 0xee, 0xe7 }
+            </summary>
+            <remarks>
+            Reading table QSENDDEST on older systems might return a hex string with
+            an odd number of characters.
+            </remarks>
+        </member>
+        <member name="M:Theobald.Common.StringHelper.ToHexAscii(System.Byte[],System.Int32,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Converts a byte array to a ASCII codepoints of hex specifiers.
+            A-F symbols are uppercase.
+            Examples:
+                { 0xaf, 0xfe} -> { 0x41, 0x46, 0x46, 0x45 }
+                { 0x23, 0x42 }  -> { 0x32, 0x33, 0x34, 0x32 }
+                { 0x1e, 0xee, 0x70 } -> { 0x31, 0x45, 0x45, 0x45, 0x37, 0x30 }
+            </summary>
+            <exception cref="T:System.ArgumentNullException"/>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="M:Theobald.Common.StringHelper.ToHexString(System.Byte[])">
+            <summary>
+            Converts a byte array to a string of hex specifiers.
+            A-F symbols are uppercase.
+            Examples:
+                { 0xaf, 0xfe} -> "AFFE"
+                { 0x23, 0x42 }  -> "2342"
+                { 0x1e, 0xee, 0x70 } ->  "1EEE70"
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.StringHelper.ToIso8601Duration(System.TimeSpan@)">
+            <summary>
+            Returns the string ISO8601 representation of a given TimeSpan
+            </summary>
+            <remarks>
+            ISO8601: "PT{0:00}H{1:00}M{2:00}.{3:000}S"
+            </remarks>
+            <param name="timeSpanValue">TimeSpan used to return the string</param>
+            TotalHours cannot be passed directly, for it 
+            is rounded up by string.Format, which causes an addition
+            of an extra hour to the TimeSpan parsed value.
+            For example, if the TimeSpan has a value of 
+            30 minutes, the property TotalHours will return the fraction of 
+            hours for it, which will be 0.5, that will be rounded to 1, making
+            the parsed TimeSpan PT01H30M.000 instead of PT00H30M.000
+            TimeSpan.Hour does not fit also, because it ranges only
+            between -23 and 23 hours and it must be possible
+            to display over 24 hours execution time
+        </member>
+        <member name="T:Theobald.Common.TheoVersionHistory">
+            <summary>
+            Version history.
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.ToString(System.String)">
+            <summary>
+            Converts the value of this instance to its equivalent string representation and appends the branch name.
+            </summary>
+            <param name="branchName">Branch name to append</param>
+            <returns>The string representation containing the branch name.</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.TryParse(System.String,Theobald.Common.VersionHistory.TheoBuild@)">
+            <summary>
+             Tries to convert the string representation of a build number
+             to its TheoBuild equivalent
+            </summary>
+            <param name="value">The string representation</param>
+            <param name="build">The converted TheoBuild</param>
+            <returns>True if the conbuild succeeded; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.Compare(Theobald.Common.VersionHistory.TheoBuild,Theobald.Common.VersionHistory.TheoBuild)">
+            <summary>
+            Compares two specified TheoBuild objects and returns an integer that
+            indicates their relationship to one another in the sort order.
+            </summary>
+            <param name="buildA">The first TheoBuild object</param>
+            <param name="buildB">The second TheoBuild object</param>
+            <returns>A 32-bit signed integer indicating the temporal relationship between the two comparands.
+            Less than zero: buildA is older than buildB.
+            Zero: buildA equals buildB. 
+            Greater than zero: buildA is newer than buildB.</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.CompareTo(Theobald.Common.VersionHistory.TheoBuild)">
+            <summary>
+            Compares this instance to the specified TheoBuild object and returns an integer that
+            indicates their relationship to one another in the sort order.
+            </summary>
+            <param name="other">The build to compare with this instance</param>
+            <returns>A 32-bit signed integer indicating the temporal relationship between the two comparands.
+            Less than zero: this instance is older than the other.
+            Zero: this instance equals the other. 
+            Greater than zero: this instance is newer than the other</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.Equals(System.Object)">
+            <summary>
+            Determines whether this instance is equal to the specified System.Object
+            </summary>
+            <param name="obj">The System.Object to compare with this instance</param>
+            <returns>True if this instance is equal to the specified System.Object; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.GetHashCode">
+            <summary>
+            Returns the hash code for this instance
+            </summary>
+            <returns>A 32-bit signed integer hash code</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.op_Equality(Theobald.Common.VersionHistory.TheoBuild,Theobald.Common.VersionHistory.TheoBuild)">
+            <summary>
+            Determines if two builds are equal
+            </summary>
+            <param name="buildA">The first build</param>
+            <param name="buildB">The second build</param>
+            <returns>True if the specified builds are equal; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.op_Inequality(Theobald.Common.VersionHistory.TheoBuild,Theobald.Common.VersionHistory.TheoBuild)">
+            <summary>
+            Determines if two builds are not equal
+            </summary>
+            <param name="buildA">The first build</param>
+            <param name="buildB">The second build</param>
+            <returns>True if the specified builds are not equal; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.op_LessThan(Theobald.Common.VersionHistory.TheoBuild,Theobald.Common.VersionHistory.TheoBuild)">
+            <summary>
+            Determines if one build is newer than another build
+            </summary>
+            <param name="buildA">The first build</param>
+            <param name="buildB">The second build</param>
+            <returns>True if the first build is newer than the second build; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoBuild.op_GreaterThan(Theobald.Common.VersionHistory.TheoBuild,Theobald.Common.VersionHistory.TheoBuild)">
+            <summary>
+            Determines if one build is older than another build
+            </summary>
+            <param name="buildA">The first build</param>
+            <param name="buildB">The second build</param>
+            <returns>True if the first build is older than the second build; false otherwise</returns>
+        </member>
+        <member name="T:Theobald.Common.VersionHistory.TheoRelease">
+            <summary>
+            Represents a product or library release
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoRelease.ToString">
+            <summary>
+            Converts the value of this instance to its equivalent string representation
+            </summary>
+            <returns>The string representation</returns>
+        </member>
+        <member name="T:Theobald.Common.VersionHistory.TheoVersion">
+            <summary>
+            Represents a product or kernel version
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.ToString">
+            <summary>
+            Converts the value of this instance to its equivalent string representation
+            </summary>
+            <returns>The string representation</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.ToString(System.String)">
+            <summary>
+            Converts the value of this instance to its equivalent string representation and appends the branch name.
+            </summary>
+            <param name="branchName">Branch name to append</param>
+            <returns>The string representation containing the branch name.</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.TryParse(System.String,Theobald.Common.VersionHistory.TheoVersion@)">
+            <summary>
+             Tries to convert the string representation of a version number
+             to its TheoVersion equivalent
+            </summary>
+            <param name="value">The string representation</param>
+            <param name="version">The converted TheoVersion</param>
+            <returns>True if the conversion succeeded; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.Compare(Theobald.Common.VersionHistory.TheoVersion,Theobald.Common.VersionHistory.TheoVersion)">
+            <summary>
+            Compares two specified TheoVersion objects and returns an integer that
+            indicates their relationship to one another in the sort order.
+            </summary>
+            <param name="versionA">The first TheoVersion object</param>
+            <param name="versionB">The second TheoVersion object</param>
+            <returns>A 32-bit signed integer indicating the temporal relationship between the two comparands.
+            Less than zero: versionA is older than versionB.
+            Zero: versionA equals versionB. 
+            Greater than zero: versionA is newer than versionB.</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.CompareTo(Theobald.Common.VersionHistory.TheoVersion)">
+            <summary>
+            Compares this instance to the specified TheoVersion object and returns an integer that
+            indicates their relationship to one another in the sort order.
+            </summary>
+            <param name="other">The version to compare with this instance</param>
+            <returns>A 32-bit signed integer indicating the temporal relationship between the two comparands.
+            Less than zero: this instance is older than the other.
+            Zero: this instance equals the other. 
+            Greater than zero: this instance is newer than the other</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.Equals(System.Object)">
+            <summary>
+            Determines whether this instance is equal to the specified System.Object
+            </summary>
+            <param name="obj">The System.Object to compare with this instance</param>
+            <returns>True if this instance is equal to the specified System.Object; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.GetHashCode">
+            <summary>
+            Returns the hash code for this instance
+            </summary>
+            <returns>A 32-bit signed integer hash code</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.op_Equality(Theobald.Common.VersionHistory.TheoVersion,Theobald.Common.VersionHistory.TheoVersion)">
+            <summary>
+            Determines if two versions are equal
+            </summary>
+            <param name="versionA">The first version</param>
+            <param name="versionB">The second version</param>
+            <returns>True if the specified versions are equal; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.op_Inequality(Theobald.Common.VersionHistory.TheoVersion,Theobald.Common.VersionHistory.TheoVersion)">
+            <summary>
+            Determines if two versions are not equal
+            </summary>
+            <param name="versionA">The first version</param>
+            <param name="versionB">The second version</param>
+            <returns>True if the specified versions are not equal; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.op_LessThan(Theobald.Common.VersionHistory.TheoVersion,Theobald.Common.VersionHistory.TheoVersion)">
+            <summary>
+            Determines if one version is newer than another version
+            </summary>
+            <param name="versionA">The first version</param>
+            <param name="versionB">The second version</param>
+            <returns>True if the first version is newer than the second version; false otherwise</returns>
+        </member>
+        <member name="M:Theobald.Common.VersionHistory.TheoVersion.op_GreaterThan(Theobald.Common.VersionHistory.TheoVersion,Theobald.Common.VersionHistory.TheoVersion)">
+            <summary>
+            Determines if one version is older than another version
+            </summary>
+            <param name="versionA">The first version</param>
+            <param name="versionB">The second version</param>
+            <returns>True if the first version is older than the second version; false otherwise</returns>
+        </member>
+        <member name="T:Theobald.Common.VersionHistory.UpdatePriority">
+            <summary>
+            Enumeration of update priority values.
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.VersionHistory.UpdatePriority.None">
+            <summary>
+            Undefined priority
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.VersionHistory.UpdatePriority.Low">
+            <summary>
+            Low priority: On the customer's side action is only required, if the customer has requested this bug fix or if advised by the support team
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.VersionHistory.UpdatePriority.Medium">
+            <summary>
+            Medium priority: It is recommended to install this version as a regular update
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.VersionHistory.UpdatePriority.High">
+            <summary>
+            High priority: Data loss is likely to occur or a security risk was found and fixed
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.WriteBuffer.SplitOrCollect(System.ArraySegment{System.Byte})">
+            <summary>
+            Returns chunks of the buffer's size by splitting/collecting/combining
+            the <paramref name="bytes"/> of multiple calls.
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.WriteBuffer.Flush">
+            <summary>
+            Returns the saved bytes that didn't make a full chunk yet.
+            </summary>
+        </member>
+        <member name="T:Theobald.Json.IJsonSerializable">
+             <summary>
+             Interface for classes, which support JSON serialization.
+            
+             The basic idea is to write explicit serialization and
+             deserialization methods for each class which
+             supports JSON serialization.
+            
+             This approach allows to implement individual processing
+             during serialization/deserialization (e. g.  to support
+             multiple serialized versions etc.) which is not possible
+             using generic serialization approaches.
+             Im contrast to generic approaches, it requires neither
+             reflection nor a code generator.
+            
+             This approach requires the programmer to explicitly write
+             serialization code, which hopefully makes him or her
+             think about the class design.
+             It should be easy to write serialization code in most cases.
+             If it is not, that might be an indicator for bad class design.
+             </summary>
+        </member>
+        <member name="M:Theobald.Json.IJsonSerializable.ReadJson(Theobald.Json.JsonReader)">
+            <summary>
+            Deserializes this instance from JSON
+            </summary>
+            <returns>returns true when there was an object and false if not. This could happen if it is called for an empty Array</returns>
+        </member>
+        <member name="M:Theobald.Json.IJsonSerializable.WriteJson(Theobald.Json.JsonWriter)">
+            <summary>
+            Serializes this instance to JSON
+            </summary>
+        </member>
+        <member name="T:Theobald.Json.JsonException">
+            <summary>
+            Represents an exception for JSON serialization
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Theobald.Json.JsonException"/> class that is empty.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the JsonException class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:Theobald.Json.JsonException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the JsonException class with a specified error message
+            and reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+            <param name="innerException">
+                The exception that is the cause of the current exception, or a null reference
+                (Nothing in Visual Basic) if no inner exception is specified.
+            </param>
+        </member>
+        <member name="T:Theobald.Json.JsonReadResult">
+            <summary>
+            The tokens which make the parser stop reading
+            </summary>
+        </member>
+        <member name="T:Theobald.Json.JsonReader">
+            <summary>
+            A lightweight JSON parser
+            </summary>
+        </member>
+        <member name="F:Theobald.Json.JsonReader.textReader">
+            <summary>
+            JSON is character-based, we need to read text
+            </summary>
+        </member>
+        <member name="F:Theobald.Json.JsonReader.tokenBuilder">
+            <summary>
+            Buffer for variable-length tokens
+            </summary>
+        </member>
+        <member name="F:Theobald.Json.JsonReader.tokenBuffer">
+            <summary>
+            Buffer for fixed-length tokens
+            </summary>
+        </member>
+        <member name="F:Theobald.Json.JsonReader.readResult">
+            <summary>
+            Result of the last read operation
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.AssertNotEof">
+            <summary>
+            Throws an exception if the end of the input
+            has already been reached
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadCharacter">
+            <summary>
+            Reads a character from the input
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.SkipWhitespace">
+            <summary>
+            Keeps reading characters from the input
+            until a non-whitespace character has been read
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ParseHexDigit(System.Char)">
+            <summary>
+            Converts a hexadecimal digit to its numeric value
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ParseEscapeSequence">
+            <summary>
+            Reads 1-5 characters,
+            interprets them as escape sequence (without leading backspace)
+            and appends the unescaped value to the variable-length token buffer
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ParseString">
+            <summary>
+            Reads characters until a double quote is encountered.
+            Reads the character following the double quote.
+            Interprets characters before the double quote as string
+            and stores them in the variable-length token buffer.
+            Performs unescaping if necessary.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadDigits">
+            <summary>
+            Reads decimal digits until a non-digit character has been read
+            and appends them to the variable-length token buffer
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadNumber">
+            <summary>
+            Reads characters, interprets them as a number
+            and stores them in the variable-length token buffer.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ParseTrue">
+            <summary>
+            Reads 3 characters and throws an exception if
+            they do not match the string 'rue'
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ParseFalse">
+            <summary>
+            Reads 4 characters and throws an exception if
+            they do not match the string 'alse'
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ParseNull">
+            <summary>
+            Reads 3 characters and throws an exception if
+            they do not match the string 'ull'
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.Read">
+            <summary>
+            Reads the next token and stores it
+            in the variable-length token buffer, if necessary
+            </summary>
+            <returns>The kind of token which has been read</returns>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.Skip">
+            <summary>
+            Skips a token
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.SkipObject">
+            <summary>
+            Skips an object.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.SkipArray">
+            <summary>
+            Skips an array.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.SkipComma">
+            <summary>
+            Reads the next member or element
+            skipping eventual commas.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadObjectStart">
+            <summary>
+            Reads the next token and throws an exception
+            if it is not the beginning of an object
+            </summary>
+            <returns>Returns true if there was an Object Start and false if an array ends or EOF</returns>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadObjectEnd">
+            <summary>
+            Reads the next token and throws an exception
+            if it is not the end of an object
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadArrayStart">
+            <summary>
+            Reads the next token and throws an exception
+            if it is not the beginning of an array
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadArrayEnd">
+            <summary>
+            Reads the next token and throws an exception
+            if it is not the end of an array
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadName">
+            <summary>
+            Reads the name of the next member of the current object
+            and returns its value, or null if the end the object has been reached.
+            Throws an exception otherwise.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadString">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it is not a string or null value.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadStrings">
+            <summary>
+            Tries to deserialize an array of strings
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadInt32">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it is not a number which can
+            be interpreted as <code>System.Int32</code>.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadInt32s">
+            <summary>
+            Tries to deserialize an array of numbers
+            Throws an exception if a number cannot
+            be interpreted as <see cref="T:System.Int32" />.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadInt64">
+            <summary>
+            Reads the next token and returns its value.
+            </summary>
+            <exception cref="T:System.OverflowException">
+            Thrown if the value is either too large
+            or too small for <see cref="T:System.Int64"/>
+            </exception>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadUInt16">
+            <summary>
+            Reads the next token and returns its value.
+            </summary>
+            <exception cref="T:System.OverflowException">
+            Thrown if the value is either too large
+            or too small for <see cref="T:System.UInt16"/>
+            </exception>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadDecimal">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it is not a string which can
+            be interpreted as <see cref="T:System.Decimal" />.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadDecimals">
+            <summary>
+            Tries to deserialize an array of decimals
+            Throws an exception if a number cannot
+            be interpreted as <see cref="T:System.Decimal" />.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadDouble">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it is not a string which can
+            be interpreted as <see cref="T:System.Double" />.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadDoubles">
+            <summary>
+            Tries to deserialize an array of doubles
+            Throws an exception if a number cannot
+            be interpreted as <see cref="T:System.Double" />.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadBoolean">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it is not a boolean.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadBooleans">
+            <summary>
+            Tries to deserialize an array of booleans
+            Throws an exception if a number cannot
+            be interpreted as <see cref="T:System.Boolean" />.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadDateTime">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it cannot be interpreted as a DateTime
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadTimeSpan">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it cannot be interpreted as a TimeSpan
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadBytes">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it cannot be interpreted as a byte array
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadEnum``1">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it cannot be interpreted as
+            the specified enum.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadEnums``1">
+            <summary>
+            Tries to deserialize an array of strings
+            Throws an exception if a string cannot
+            be interpreted as the given enum.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadEnums``1(System.Boolean)">
+            <summary>
+            Tries to deserialize an array of strings.
+            <param name="ignoreUnknownStrings">
+            Boolean indicating whether to ignore unknown string literals or not.
+            </param>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadObject``1(System.Func{``0})">
+            <summary>
+            Tries to deserialize an object
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadObject``1">
+            <summary>
+            Tries to deserialize an object
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.AddObjects``1(System.Func{``0},System.Collections.Generic.ICollection{``0})">
+            <summary>
+            Tries to deserialize an array of objects
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.AddObjects``1(System.Collections.Generic.ICollection{``0})">
+            <summary>
+            Tries to deserialize an array of objects
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadObjects``1(System.Func{``0})">
+            <summary>
+            Tries to deserialize an array of objects
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadObjects``1">
+            <summary>
+            Tries to deserialize an array of objects
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadJson(Theobald.Json.IJsonSerializable,System.String)">
+            <summary>
+            Tries to deserialize an object
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.FromJson``1(System.String)">
+            <summary>
+            Tries to deserialize an object
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadFile(Theobald.Json.IJsonSerializable,System.String)">
+            <summary>
+            Deserializes an object which has been stored to a file
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.FromFile``1(System.String)">
+            <summary>
+            Tries to deserialize an object
+            </summary>
+        </member>
+        <member name="T:Theobald.Json.JsonSerializableObject">
+            <summary>
+            Can be used as base class for serializable objects.
+            Supports inheritance.
+            For reference code see AbapColumn and TableField in Theobald.Extractors
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonSerializableObject.ReadJsonProperty(Theobald.Json.JsonReader,System.String)">
+            <summary>
+            Reads the value of the JSON member at the <paramref name="reader"/>'s
+            position, and sets the corresponding property (if any) based on
+            the member's name
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonSerializableObject.WriteJsonFields(Theobald.Json.JsonWriter)">
+            <summary>
+            Serializes all required private fields using the <paramref name="writer"/>
+            </summary>
+        </member>
+        <member name="T:Theobald.Json.JsonWriter">
+            <summary>
+            A lightweight, pretty-printing JSON generator
+            </summary>
+            <remarks>JSON spec can be found here: http://json.org/ </remarks>
+        </member>
+        <member name="F:Theobald.Json.JsonWriter.indentation">
+             <summary>
+             Our generated JSON should be nice to read for humans,
+             (that makes debugging a lot easier)
+             therefore we need newlines and indentation.
+             We use a statically defined block of characters
+             as a source for whitespace.
+             </summary>
+             <remarks>
+             This block must be large enough to support
+             the current level of indentation.
+             It therefore implicitly limits the
+             maximum level of indentation.
+            
+             ATTENTION!
+             Please consider redesigning your nested structure
+             before you increase the size of this array!
+             TEN levels of nesting should be PLENTY for
+             all sanely designed structures!
+             </remarks>
+        </member>
+        <member name="F:Theobald.Json.JsonWriter.textWriter">
+            <summary>
+            JSON is character-based, we need to write text
+            </summary>
+        </member>
+        <member name="F:Theobald.Json.JsonWriter.indentationLevel">
+            <summary>
+            The current level of indentation.
+            </summary>
+        </member>
+        <member name="F:Theobald.Json.JsonWriter.isCommaRequired">
+            <summary>
+            If this flag is set, a comma will be written at
+            the end of a line
+            </summary>
+        </member>
+        <member name="F:Theobald.Json.JsonWriter.isPrettyPrintEnabled">
+            <summary>
+            If this flag is set, the json string will be prettyprinted.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteNewLine">
+            <summary>
+            Writes a new line and adds whitespace
+            according to the current indentation settings
+            <remarks>
+            If this method throws an ArgumentOutOfRangeException,
+            you have exceeded the maximum indentation level.
+            That probably means you have written an infinite loop
+            or you are trying to serialize an insanely nested structure.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteNewMemberOrElement">
+            <summary>
+            This method must be called before writing a new member to an object
+            or  a new element to an array
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteObjectStart">
+            <summary>
+            Starts a new object
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteObjectEnd">
+            <summary>
+            Finishes the current object
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteArrayStart">
+            <summary>
+            Starts a new array
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteArrayEnd">
+            <summary>
+            Finishes an array
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteArray``1(System.String,System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="values"/> is <code>null</code> or empty.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteString(System.String)">
+            <summary>
+            Writes a string value and performs escaping, if required
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteNumber(System.Int32)">
+            <summary>
+            Writes a number value
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteName(System.String)">
+            <summary>
+            Writes a name of a member
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteNull(System.String)">
+            <summary>
+            Writes a member to an object with an explicit value of <code>null</code>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.String)">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="value"/> is <code>null</code>
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="values"/> is <code>null</code> or empty.
+            All elements of the enumerable are serialized (<code>null</code>s, too).
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.Int32})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.Int64})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.UInt16})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.Double})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.Decimal})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.Int16})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.Byte})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Collections.Generic.IEnumerable{System.Int32})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="values"/> is <code>null</code> or empty
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Byte[])">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="value"/> is <code>null</code>
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Enum)">
+            <summary>
+            Writes a member to an object
+            </summary>
+            <remarks>
+            Member is omitted if <code>value</code>
+            is <code>null</code></remarks>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteEnums``1(System.String,System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Writes an enumerable of enums as member to an object
+            <remarks>
+            Member is omitted if <paramref name="values"/> is <code>null</code> or empty
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,Theobald.Json.IJsonSerializable)">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="value"/> is <code>null</code>
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Collections.Generic.IEnumerable{Theobald.Json.IJsonSerializable})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="values"/> is <code>null</code> or empty.
+            All elements of the enumerable are serialized (<code>null</code>s, too).
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Writes a DateTime member to an object, precision is milliseconds.
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.TimeSpan})">
+            <summary>
+            Writes a TimeSpan member to an object, precision is milliseconds.
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteDate(System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Writes a Date (yyyy-MM-dd) member to an object.
+            </summary>
+            <param name="name"></param>
+            <param name="nullable"></param>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteTime(System.String,System.Nullable{System.DateTimeOffset})">
+            <summary>
+            Writes a Time (HH:mm:ss) member to an object, precision is seconds.
+            </summary>
+            <param name="name"></param>
+            <param name="nullable"></param>
+        </member>
+        <member name="T:Theobald.Logging.LogLevel">
+            <summary>
+            Specifies the severity of log entries.
+            </summary>
+        </member>
+        <member name="F:Theobald.Logging.LogLevel.None">
+            <summary>
+            The severity of the log entry is not defined.
+            </summary>
+        </member>
+        <member name="F:Theobald.Logging.LogLevel.Debug">
+            <summary>
+            The log entry contains detailed information for debugging purposes.
+            </summary>
+        </member>
+        <member name="F:Theobald.Logging.LogLevel.Info">
+            <summary>
+            The log entry contains general information.
+            </summary>
+        </member>
+        <member name="F:Theobald.Logging.LogLevel.Warning">
+            <summary>
+            The log entry contains information about potential problems.
+            </summary>
+        </member>
+        <member name="F:Theobald.Logging.LogLevel.Error">
+            <summary>
+            The log entry contains information about errors.
+            </summary>
+        </member>
+        <member name="T:Theobald.Logging.LogEntry">
+            <summary>
+            Represents a log entry
+            </summary>
+        </member>
+        <member name="P:Theobald.Logging.LogEntry.StartedAt">
+            <summary>
+            Gets the absolute time at which logging of a series
+            of events (e. g. an extraction) has started
+            </summary>
+        </member>
+        <member name="P:Theobald.Logging.LogEntry.Elapsed">
+            <summary>
+            Gets the relative time offset of this entry
+            </summary>
+        </member>
+        <member name="P:Theobald.Logging.LogEntry.Timestamp">
+            <summary>
+            Gets the absolute timestamp of this entry
+            </summary>
+        </member>
+        <member name="P:Theobald.Logging.LogEntry.Level">
+            <summary>
+            Gets the severity of the log entry
+            </summary>
+        </member>
+        <member name="P:Theobald.Logging.LogEntry.Source">
+            <summary>
+            Gets the source of the log entry
+            </summary>
+        </member>
+        <member name="P:Theobald.Logging.LogEntry.Message">
+            <summary>
+            Gets the text of the log entry
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.LogEntry.ToString">
+            <summary>
+            Serializes the entry
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.LogEntry.Parse(System.ArraySegment{System.Char},System.DateTime)">
+            <summary>
+            Deserializes an  entry
+            </summary>
+            <exception cref="T:System.ArgumentException"/>
+        </member>
+        <member name="F:Theobald.Logging.LoggerBase.appendLock">
+            <summary>
+            We want to keep multi-line messages / stack traces together in one block,
+            and don't want our lines to get mixed up by parallel calls.
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.LoggerBase.MillisecondsFloorUtc(System.DateTime)">
+            <summary>
+            Cuts off all values that are more precise than milliseconds
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                If non-UTC. <see cref="T:System.DateTime"/> does not contain a time zone,
+                which causes a lot of problems when calculating with
+                <see cref="F:System.DateTimeKind.Local"/>.
+            </exception>
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.LoggerBase.SplitMessage(System.String,System.String,System.DateTime,Theobald.Logging.LogLevel)">
+            <summary>
+            Creates a separate <see cref="T:Theobald.Logging.LogEntry"/> for each line of <paramref name="message"/>
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.LoggerMultiSplitting.NewEntry(System.DateTime,Theobald.Logging.LogLevel,System.String,System.String)">
+            <summary>
+            Automatically starts a new log after 24h.
+            This requires log entries to arrive ordered by timestamp.
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.LoggerTextFile.StartWithNewFile">
+            <summary>
+            Increases the current timestamp by one millisecond
+            until it results in a new log file
+            </summary>
+        </member>
+        <member name="M:Theobald.SyntacticSugar.ObjectExtensions.ThrowIfNull(System.Object,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentNullException"/>
+            if <paramref name="value"/> is <code>null</code>
+            </summary>
+        </member>
+        <member name="M:Theobald.SyntacticSugar.ObjectExtensions.GetOrThrowIfNull``1(``0,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentNullException"/>
+            if <paramref name="value"/> is <code>null</code>
+            or returns <paramref name="value"/>
+            </summary>
+        </member>
+        <member name="M:Theobald.SyntacticSugar.StringExtensions.ThrowIfNullOrWhiteSpace(System.String,System.String)">
+            <summary>
+            Throws an <see cref="T:System.ArgumentException"/>
+            if <paramref name="value"/> is <code>null</code> or whitespace.
+            </summary>
+        </member>
+        <member name="M:Theobald.SyntacticSugar.StringExtensions.ReplaceWith(System.String,System.Object[])">
+            <summary>
+            Performs <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/>
+            if <paramref name="value"/> is not <code>null</code> or whitespace
+            </summary>
+        </member>
+        <member name="T:Theobald.Xml.SlimXmlReader">
+            <summary>
+            Lightweight XML reader, that is able to process somewhat invalid XML
+            (e. g. unescaped control characters in content)
+            </summary>
+        </member>
+        <member name="M:Theobald.Xml.SlimXmlReader.ReadElementString">
+            <summary>
+            Assumes current position is <see cref="F:Theobald.Xml.SlimXmlReadResult.StartTag"/>.
+            Expects the content of the element to contain no child elements.
+            Returns the unescaped content and advances the current position to
+            <see cref="F:Theobald.Xml.SlimXmlReadResult.EndTag"/>.
+            </summary>
+        </member>
+    </members>
+</doc>
