@@ -181,6 +181,38 @@
             and a reference to the inner exception that is teh cause of this exception.
             </summary>
         </member>
+        <member name="T:Theobald.Common.Csv.CsvReaderState">
+            <summary>
+            States for the CsvReader
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.Csv.CsvReaderState.Line">
+            <summary>
+            Normal reading state
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.Csv.CsvReaderState.NewLine">
+            <summary>
+            The cell loaded into the Current property marks the beginning of a new row.
+            Hence it is the first cell of the new row.
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.Csv.CsvReaderState.NeedsData">
+            <summary>
+            The reader is waiting for more data to be supplied via the Feed() method.
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.Csv.CsvReaderState.Error">
+            <summary>
+            Non recoverable error. Check the exception thrown with this for more information.
+            </summary>
+        </member>
+        <member name="F:Theobald.Common.Csv.CsvReaderState.EndOfData">
+            <summary>
+            The reader is closed since the CSV data was read completely.
+            This state is hit when the reader runs into MoreData AFTER the Finalize() method was called.
+            </summary>
+        </member>
         <member name="T:Theobald.Common.Csv.CsvReader">
             <summary>
                 Reads the characters provided via Feed() and assembles data from CSV following RFC4180.
@@ -193,6 +225,7 @@
             {
                 ReadCharsFromSource(buffer);
                 reader.FillData(new ArraySegment&lt;char&gt;(buffer));
+            TODO: adjust this to the new state based reading
                 while (reader.MoveNext())
                 {
                     bool isNewLine = reader.NewLine;
@@ -206,11 +239,6 @@
         <member name="F:Theobald.Common.Csv.CsvReader.empty">
             <summary>
                 Static empty array segment to reference for performance optimization.
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.Csv.CsvReader.segment">
-            <summary>
-                The current slice of a read buffer, the reader operates on.
             </summary>
         </member>
         <member name="F:Theobald.Common.Csv.CsvReader.firstLine">
@@ -247,7 +275,7 @@
                 which occur when transitioning between quote and non quote
             </summary>
         </member>
-        <member name="P:Theobald.Common.Csv.CsvReader.NewLine">
+        <member name="P:Theobald.Common.Csv.CsvReader.State">
             <summary>
                 Indicates if Current marks the first item of a new line.
                 For the first line, this is always false.
@@ -271,12 +299,21 @@
             </summary>
             <param name="data"></param>
             <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvReader.Feed(System.ArraySegment{System.Byte})">
+            <summary>
+                (Re)fills the reader with the next chunk of data to parse.
+            </summary>
+            <param name="data"></param>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.InvalidOperationException"></exception>
         </member>
         <member name="M:Theobald.Common.Csv.CsvReader.MoveNext">
             <summary>
                 Checks if there is a cell to move into the Current property.
                 If not, the parser is reading more of the data if available and
-                then checks again if cells could be assembled.
+                then checks again if cells can be assembled.
             </summary>
             <returns>true if there is a next cell available, false otherwise.</returns>
         </member>
@@ -288,7 +325,7 @@
             </summary>
             <returns>true if a cell was loaded, falls otherwise.</returns>
         </member>
-        <member name="M:Theobald.Common.Csv.CsvReader.Flush">
+        <member name="M:Theobald.Common.Csv.CsvReader.FinalizeReader">
             <summary>
                 Call this method if there is no data left to be filled into the reader.
                 It empties the buffer and assumes that all data was passed through the reader,
@@ -315,11 +352,6 @@
             </summary>
             <exception cref="T:System.Exception"></exception>
             <exception cref="T:System.ArgumentOutOfRangeException"></exception>
-        </member>
-        <member name="M:Theobald.Common.Csv.CsvReader.HandleOverlap">
-            <summary>
-                Data in the current chunk which is an incomplete quote or non-quote.
-            </summary>
         </member>
         <member name="M:Theobald.Common.Csv.CsvReader.AddCell(System.ArraySegment{System.Char})">
             <summary>

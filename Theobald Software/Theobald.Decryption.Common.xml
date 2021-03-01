@@ -250,6 +250,13 @@
             </summary>
             <param name="definition"></param>
         </member>
+        <member name="M:Theobald.Decryption.Common.Csv.CsvHelper.QuoteIfRequired(System.String)">
+            <summary>
+            Applies the csv quoting rules to the string.
+            </summary>
+            <param name="value"></param>
+            <returns>a quoted csv cell.</returns>
+        </member>
         <member name="M:Theobald.Decryption.Common.Csv.CsvHelper.ToCsvString(System.Object,Theobald.Decryption.Common.ResultType)">
             <summary>
             Converts the provided value into a string respecting the configuration modelled by the destination definition.
