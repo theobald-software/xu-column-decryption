@@ -220,19 +220,36 @@
             <example>
                 <code>
             CsvReader reader = new CsvReader(',');
-            char[] buffer;
+            byte[] buffer;
             while (dataAvailable)
             {
-                ReadCharsFromSource(buffer);
-                reader.FillData(new ArraySegment&lt;char&gt;(buffer));
-            TODO: adjust this to the new state based reading
-                while (reader.MoveNext())
+                switch (reader.State)
                 {
-                    bool isNewLine = reader.NewLine;
-                    ArraySegment&lt;char&gt; cell = reader.Current;
+                    case CsvReaderState.Line:
+                        HandleCell(reader.Current.Value);
+                        break;
+                    case CsvReaderState.NewLine:
+                        HandleLineBreak();
+                        HandleCell(reader.Current.Value);
+                        break;
+                    case CsvReaderStateNeedsData:
+                        int bytesRead = await stream.ReadAsync(buffer);
+                        if (0 == bytesRead)
+                        {
+                            reader.FinalizeReader();
+                        }
+                        else
+                        {
+                            reader.Feed(new ArraySegment&lt;byte&gt;(buffer));
+                        }
+                        break;
+                    case CsvReaderState.EndOfData:
+                        dataAvailable = false;
+                        break;
+                    default:
+                        throw new InvalidOperationException();
                 }
             }
-            List&lt;ArraySegment&lt;char&gt;&gt; lastTokens = reader.Flush();
             </code>
             </example>
         </member>
