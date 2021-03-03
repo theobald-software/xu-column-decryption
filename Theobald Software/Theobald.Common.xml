@@ -214,44 +214,46 @@
             </summary>
         </member>
         <member name="T:Theobald.Common.Csv.CsvReader">
-            <summary>
-                Reads the characters provided via Feed() and assembles data from CSV following RFC4180.
-            </summary>
-            <example>
-                <code>
-            CsvReader reader = new CsvReader(',');
-            byte[] buffer;
-            while (dataAvailable)
-            {
-                switch (reader.State)
-                {
-                    case CsvReaderState.Line:
-                        HandleCell(reader.Current.Value);
-                        break;
-                    case CsvReaderState.NewLine:
-                        HandleLineBreak();
-                        HandleCell(reader.Current.Value);
-                        break;
-                    case CsvReaderStateNeedsData:
-                        int bytesRead = await stream.ReadAsync(buffer);
-                        if (0 == bytesRead)
-                        {
-                            reader.FinalizeReader();
-                        }
-                        else
-                        {
-                            reader.Feed(new ArraySegment&lt;byte&gt;(buffer));
-                        }
-                        break;
-                    case CsvReaderState.EndOfData:
-                        dataAvailable = false;
-                        break;
-                    default:
-                        throw new InvalidOperationException();
-                }
-            }
-            </code>
-            </example>
+             <summary>
+                 Reads the characters provided via Feed() and assembles data from CSV following RFC4180.
+             </summary>
+             <example>
+                 <code>
+             CsvReader reader = new CsvReader(',');
+             byte[] buffer;
+             while (dataAvailable)
+             {
+                 switch (reader.State)
+                 {
+                     case CsvReaderState.Line:
+                         HandleCell(reader.Current.Value);
+                         break;
+                     case CsvReaderState.NewLine:
+                         HandleLineBreak();
+                         HandleCell(reader.Current.Value);
+                         break;
+                     case CsvReaderStateNeedsData:
+                         int bytesRead = await stream.ReadAsync(buffer);
+                         if (0 == bytesRead)
+                         {
+                             reader.FinalizeReader();
+                         }
+                         else
+                         {
+                             reader.Feed(new ArraySegment&lt;byte&gt;(buffer));
+                         }
+                         break;
+                     case CsvReaderState.EndOfData:
+                         dataAvailable = false;
+                         break;
+                     default:
+                         throw new InvalidOperationException();
+                 }
+            
+                 reader.MoveNext();
+             }
+             </code>
+             </example>
         </member>
         <member name="F:Theobald.Common.Csv.CsvReader.empty">
             <summary>
