@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Theobald.Decryption.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <Reference Include="Theobald.Decryption.Common">
       <HintPath>..\Theobald Software\Theobald.Decryption.Common.dll</HintPath>
     </Reference>
   </ItemGroup>

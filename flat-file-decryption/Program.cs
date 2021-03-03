@@ -137,6 +137,7 @@ namespace FileDecryption
                 switch (args[i])
                 {
                     case "-t":
+                    case "--target":
                         string tempPath = args[i + 1];
                         if (tempPath[0] == '-')
                         {
@@ -149,6 +150,7 @@ namespace FileDecryption
 
                         break;
                     case "-s":
+                    case "--source":
                         if (!CheckArg("-s", i, ref sourceFile, args))
                         {
                             return false;
@@ -156,6 +158,7 @@ namespace FileDecryption
 
                         break;
                     case "-m":
+                    case "--metadata":
                         if (!CheckArg("-m", i, ref metaDataFile, args))
                         {
                             return false;
@@ -163,6 +166,7 @@ namespace FileDecryption
 
                         break;
                     case "-k":
+                    case "--key":
                         if (!CheckArg("-k", i, ref keyFile, args))
                         {
                             return false;

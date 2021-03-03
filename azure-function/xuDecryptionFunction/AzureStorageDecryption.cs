@@ -27,6 +27,7 @@ namespace xuDecryptionFunction
         private static string sourceContainerName;
         private static string targetContainerName;
         private static string privateKeyFileName;
+        private static string metadataFileName = "metadata.json";
         private static CloudBlobContainer sourceContainer;
         private static CloudBlobContainer targetContainer;
         #endregion
@@ -66,7 +67,7 @@ namespace xuDecryptionFunction
                 var conString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
                 sourceContainerName = Environment.GetEnvironmentVariable("SourceContainer");
                 targetContainerName = Environment.GetEnvironmentVariable("TargetContainer");
-                privateKeyFileName = Environment.GetEnvironmentVariable("PrivateKeyFile");
+                privateKeyFileName = Environment.GetEnvironmentVariable("PrivateKeyFileName");
 
                 // Remove this check if you are not using a connection string
                 if (string.IsNullOrWhiteSpace(conString))
@@ -76,7 +77,7 @@ namespace xuDecryptionFunction
 
                 if (string.IsNullOrWhiteSpace(privateKeyFileName))
                 {
-                    throw new InvalidOperationException("No source container was specified.");
+                    throw new InvalidOperationException("No private key file was specified.");
                 }
 
                 if (string.IsNullOrWhiteSpace(sourceContainerName))
@@ -148,7 +149,11 @@ namespace xuDecryptionFunction
             finally
             {
                 // cleanup some resources
-                ArrayPool<byte>.Shared.Return(ivArray);
+                if (ivArray != null)
+                {
+                    ArrayPool<byte>.Shared.Return(ivArray);
+                }
+
                 log.LogInformation($"Function started at {startTime} terminated.");
             }
         }
@@ -219,7 +224,7 @@ namespace xuDecryptionFunction
         /// <exception cref="FileNotFoundException"></exception>
         private static async Task<string> GetPrivateKeyAsync()
         {
-            CloudBlob blob = targetContainer.GetBlobReference("private.xml");
+            CloudBlob blob = targetContainer.GetBlobReference(privateKeyFileName);
             if (!await blob.ExistsAsync())
             {
                 throw new FileNotFoundException("No key file found. Aborting decryption");
@@ -238,7 +243,7 @@ namespace xuDecryptionFunction
         /// <exception cref="FileNotFoundException"></exception>
         private static async Task<string> GetMetaDataAsync()
         {
-            CloudBlob blob = sourceContainer.GetBlobReference(privateKeyFileName);
+            CloudBlob blob = sourceContainer.GetBlobReference(metadataFileName);
             if (!await blob.ExistsAsync())
             {
                 throw new FileNotFoundException("No meta data file found. Aborting decryption");

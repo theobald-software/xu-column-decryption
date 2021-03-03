@@ -111,7 +111,8 @@ namespace xuDecryptionLambda
                 // decrypt aes session key
                 byte[] sessionKey = privateKey.Decrypt(csvProcessor.EncryptedSessionKey, true);
 
-                LambdaLogger.Log($"Preparing multipart upload with a minimal part size of {writeThreshold} bytes");
+                LambdaLogger.Log(
+                    $"Preparing multipart upload with a minimal part size of {writeThreshold.ToString()} bytes");
                 outputStream = new MemoryStream(partSize);
                 await InitPartUploadAsync();
 

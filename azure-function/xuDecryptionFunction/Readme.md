@@ -19,6 +19,7 @@ Using Azure functions has the following requirements:
 We used the windows installers of each of the tools
 
 Before integrating the Function app into the Azure environment, you have to specify the names of the target and source container in your Azure Storage account. To do so open the `local.settings.json` and modify the values for the respective keys. If you do not use a connection string, please also delete the check for it in the functions code at `line 72`.
+For us the deployment of the environment variables did not work reliably. It may be necessary to manually add the key-value pairs in the function app in the configuration.
 The app assumes that the private key file is located in the target container. If your infrastructure is different, please adjust the code according to your needs.
 You also have to specify the source container in the string of the BlobTrigger on `line 45`. Replace \<yourStorageBlob> with the path of the container which is targeted by the XU upload.
 

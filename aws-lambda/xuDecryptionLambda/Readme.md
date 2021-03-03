@@ -22,10 +22,17 @@ If already installed check if new version is available.
 dotnet tool update -g Amazon.Lambda.Tools
 ```
 
-Deploy application
+Deploy the application in interactive mode (runtiem is netcoreapp3.1)
 ```
 dotnet lambda deploy-function
 ```
+
+or with a config file.
+```
+dotnet lambda deploy-function -cfg aws-lambda-tools-defaults.json
+```
+Note that the configuration file, which is provided with the repository is only a sample, which will not work with your environment.
+Modify the file to fit your needs before deploying.
 
 # Setup
 
