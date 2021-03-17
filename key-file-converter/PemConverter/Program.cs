@@ -11,6 +11,7 @@ namespace PemConverter
             if (args.Length == 0)
             {
                 Console.WriteLine("Missing Argument. Use PemLoader.exe yourPubKey.pem");
+                return;
             }
 
             string pemFileName = args[0];
