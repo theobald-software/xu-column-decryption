@@ -7,6 +7,7 @@ obj/
 
 # include the Theobald Software GmbH's binaries
 !Theobald Software
+!key-file-converter\binaries
 
 # no user specific files
 *.user
