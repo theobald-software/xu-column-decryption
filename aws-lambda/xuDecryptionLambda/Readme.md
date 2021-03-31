@@ -36,11 +36,28 @@ Modify the file to fit your needs before deploying.
 
 # Setup
 
-You have to set the triggers for your Lambda function yourself. We do not provide any presets for this area.
+You have to set the triggers for your Lambda function yourself. We do not provide any presets for it.
 If you change the name of the files or the name of the handler, you also have to change the `serverless.template` file accordingly.
-The names for the source and target buckets are retrieved from environment variables set for your Lambda function. You will have to set them yourself. If you do not provide these variables, the function code will throw an error, when checking for them.
-The variables are named like so:
-sourcebucket
-targetbucket
 
-The private key is assumed to be located in the target bucket. The assumed name is "private.xml".
+The function code uses some environment variables, which can be set in the function's configuration tab. The function checks its environment including the variables and throws an error if one of the values can not be found.
+
+```
+sourcebucket
+```
+The source bucket is the name of the bucket, from which the function loads the metadata and ciphertext.
+
+```
+targetbucket
+```
+The target bucket is the name of the bucket, to which the function uploads the plaintext.
+
+```
+privatekeyid
+```
+The private key id is the identifier of the key pair in your KMS. Several formats are permitted:
+* Key ID: 1234abcd-12ab-34cd-56ef-1234567890ab (we tested the function with this one)
+* Key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+* Alias name: alias/ExampleAlias
+* Alias ARN: arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias
+
+For more information regarding the KMS integration view the [API Reference](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html).
