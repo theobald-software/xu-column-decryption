@@ -55,8 +55,9 @@ The target bucket is the name of the bucket, to which the function uploads the p
 privatekeyid
 ```
 The private key id is the identifier of the key pair in your KMS. Several formats are permitted:
-    * Key ID: 1234abcd-12ab-34cd-56ef-1234567890ab (we tested the function with this one)
-    * Key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
-    * Alias name: alias/ExampleAlias
-    * Alias ARN: arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias
-For more information regarding the KMS integration view the [API Reference](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html)
+* Key ID: 1234abcd-12ab-34cd-56ef-1234567890ab (we tested the function with this one)
+* Key ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab
+* Alias name: alias/ExampleAlias
+* Alias ARN: arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias
+
+For more information regarding the KMS integration view the [API Reference](https://docs.aws.amazon.com/kms/latest/APIReference/API_Decrypt.html).
