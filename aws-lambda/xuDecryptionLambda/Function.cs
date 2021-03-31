@@ -8,6 +8,8 @@ using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon;
+using Amazon.KeyManagementService;
+using Amazon.KeyManagementService.Model;
 using Amazon.Lambda.Core;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -17,6 +19,7 @@ using Theobald.Decryption.Common.Csv;
 using JsonSerializer = Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer;
 
 [assembly: LambdaSerializer(typeof(JsonSerializer))]
+
 namespace xuDecryptionLambda
 {
     public class Function
@@ -25,22 +28,25 @@ namespace xuDecryptionLambda
         private static byte[] ivArray;
 
         #region AWS S3 Interop
+
         private AmazonS3Client client;
         private MemoryStream outputStream;
         private string sourceBucketName = string.Empty;
         private string targetBucketName = string.Empty;
         private string targetFileName = string.Empty;
         private string sourceFileName = string.Empty;
-        private string keyName = "private.xml";
+        private string keyId = string.Empty;
 
         // multipart upload information
         private string uploadId;
         private List<PartETag> tags;
         private long filePosition;
+
         private int partNumber = 1;
+
         // partSize is essentially the buffer size of the memory stream, which caches the data for every single part
-        private readonly int partSize = 8 * (int)Math.Pow(2, 20); // 8 MB
-        private readonly int writeThreshold = 6 * (int)Math.Pow(2, 20); // 5 MB
+        private readonly int partSize = 8 * (int) Math.Pow(2, 20); // 8 MB
+        private readonly int writeThreshold = 6 * (int) Math.Pow(2, 20); // 5 MB
 
         #endregion
 
@@ -62,30 +68,12 @@ namespace xuDecryptionLambda
                 targetFileName = sourceFileName = input.Records[0].S3.Object.Key;
 
                 LambdaLogger.Log("Loading and checking source/destination buckets, file name...");
-                client = new AmazonS3Client(RegionEndpoint.USEast1);
                 this.sourceBucketName = Environment.GetEnvironmentVariable("sourcebucket");
                 this.targetBucketName = Environment.GetEnvironmentVariable("targetbucket");
+                this.keyId = Environment.GetEnvironmentVariable("privatekeyid");
 
                 // validate information
-                if (string.IsNullOrWhiteSpace(this.sourceBucketName))
-                {
-                    throw new InvalidOperationException("No source bucket was specified.");
-                }
-
-                if (string.IsNullOrWhiteSpace(this.targetBucketName))
-                {
-                    throw new InvalidOperationException("No target bucket was specified.");
-                }
-
-                if (string.IsNullOrWhiteSpace(this.targetFileName))
-                {
-                    throw new InvalidOperationException("No target file was specified.");
-                }
-
-                if (string.IsNullOrWhiteSpace(this.sourceFileName))
-                {
-                    throw new InvalidOperationException("No source file was specified.");
-                }
+                ValidateEnvironment();
 
                 LambdaLogger.Log(Environment.GetEnvironmentVariable("AWS_REGION"));
                 LambdaLogger.Log("Loading ciphertext...");
@@ -95,6 +83,7 @@ namespace xuDecryptionLambda
                     Key = sourceFileName,
                 };
 
+                this.client = new AmazonS3Client(RegionEndpoint.USEast1);
                 using GetObjectResponse response = await client.GetObjectAsync(readRequest);
                 if (response.HttpStatusCode != HttpStatusCode.OK)
                 {
@@ -104,12 +93,8 @@ namespace xuDecryptionLambda
                 LambdaLogger.Log("Loading metadata...");
                 using CsvProcessor csvProcessor = new CsvProcessor(await GetMetaDataAsync());
 
-                // loading private key
-                LambdaLogger.Log("Loading private key...");
-                using var privateKey = new RSACryptoServiceProvider();
-                privateKey.FromXmlString(await GetPrivateKeyAsync());
                 // decrypt aes session key
-                byte[] sessionKey = privateKey.Decrypt(csvProcessor.EncryptedSessionKey, true);
+                byte[] sessionKey = await DecryptSessionKey(csvProcessor.EncryptedSessionKey);
 
                 LambdaLogger.Log(
                     $"Preparing multipart upload with a minimal part size of {writeThreshold.ToString()} bytes");
@@ -157,6 +142,47 @@ namespace xuDecryptionLambda
             }
         }
 
+        private void ValidateEnvironment()
+        {
+            if (string.IsNullOrWhiteSpace(this.sourceBucketName))
+            {
+                throw new InvalidOperationException("No source bucket was specified.");
+            }
+
+            if (string.IsNullOrWhiteSpace(this.targetBucketName))
+            {
+                throw new InvalidOperationException("No target bucket was specified.");
+            }
+
+            if (string.IsNullOrWhiteSpace(this.targetFileName))
+            {
+                throw new InvalidOperationException("No target file was specified.");
+            }
+
+            if (string.IsNullOrWhiteSpace(this.sourceFileName))
+            {
+                throw new InvalidOperationException("No source file was specified.");
+            }
+
+            if (string.IsNullOrWhiteSpace(this.keyId))
+            {
+                throw new InvalidOperationException("No key id was specified.");
+            }
+        }
+
+        private async Task<byte[]> DecryptSessionKey(byte[] encryptedSessionKey)
+        {
+            using var kmsClient = new AmazonKeyManagementServiceClient();
+            DecryptRequest aesKeyDecryptionRequest = new DecryptRequest
+            {
+                EncryptionAlgorithm = EncryptionAlgorithmSpec.RSAES_OAEP_SHA_1,
+                CiphertextBlob = new MemoryStream(encryptedSessionKey),
+                KeyId = this.keyId
+            };
+            DecryptResponse decryptionResponse = await kmsClient.DecryptAsync(aesKeyDecryptionRequest);
+            return decryptionResponse.Plaintext.ToArray();
+        }
+
         #region Crypto
 
         /// <summary>
@@ -180,7 +206,7 @@ namespace xuDecryptionLambda
                     do
                     {
                         current = span[position];
-                        BigInteger part = (byte)(current & 127);
+                        BigInteger part = (byte) (current & 127);
                         ret |= part << (7 * position);
                         position++;
                     } while ((current & 128) > 0);
@@ -278,7 +304,8 @@ namespace xuDecryptionLambda
             };
 
             // Complete the upload.
-            CompleteMultipartUploadResponse completeUploadResponse = await client.CompleteMultipartUploadAsync(completeRequest);
+            CompleteMultipartUploadResponse completeUploadResponse =
+                await client.CompleteMultipartUploadAsync(completeRequest);
             LambdaLogger.Log(completeUploadResponse.HttpStatusCode == HttpStatusCode.OK
                 ? "Multipart upload finished successfully."
                 : $"Error when wrapping up multipart upload: {System.Text.Json.JsonSerializer.Serialize(completeUploadResponse)}");
@@ -305,25 +332,6 @@ namespace xuDecryptionLambda
             }
 
             using StreamReader sr = new StreamReader(response.ResponseStream);
-            return await sr.ReadToEndAsync();
-        }
-
-        private async Task<string> GetPrivateKeyAsync()
-        {
-            var readRequest = new GetObjectRequest
-            {
-                BucketName = targetBucketName,
-                Key = keyName
-            };
-
-            LambdaLogger.Log("loading rsa key");
-            using GetObjectResponse response = await client.GetObjectAsync(readRequest).ConfigureAwait(false);
-            if (response.HttpStatusCode != HttpStatusCode.OK)
-            {
-                throw new Exception("Could not retrieve file from source bucket.");
-            }
-
-            using var sr = new StreamReader(response.ResponseStream);
             return await sr.ReadToEndAsync();
         }
 
