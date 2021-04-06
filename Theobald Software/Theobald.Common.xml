@@ -489,6 +489,13 @@
             If the file is currently in use, waits and retries a few times.
             </summary>
         </member>
+        <member name="M:Theobald.Common.IoHelper.OpenOrCreateFileRetryReadWrite(System.String)">
+            <summary>
+            Tries to open a file for reading and writing.
+            If the file is currently in use, waits and retries a few times.
+            If the file does not exist it will be created.
+            </summary>
+        </member>
         <member name="M:Theobald.Common.IoHelper.OpenFileRetryAppend(System.String,System.IO.FileShare)">
             <summary>
             Tries to open a file for appending.
@@ -1138,7 +1145,17 @@
             defined by the JSON standard.
             </summary>
         </member>
-        <member name="M:Theobald.Json.JsonReader.ReadNumbers">
+        <member name="M:Theobald.Json.JsonReader.ReadBooleans(System.Action{System.Nullable{System.Boolean}})">
+            <summary>
+            Reads an array of booleans.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadStrings(System.Action{System.String})">
+            <summary>
+            Reads an array of strings.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadNumbers(System.Action{System.Nullable{Theobald.Common.Number}})">
             <summary>
             Reads an array of numbers.
             </summary>
@@ -1260,6 +1277,11 @@
             </summary>
         </member>
         <member name="M:Theobald.Json.JsonReader.AddObjects``1(System.Func{``0},System.Collections.Generic.ICollection{``0})">
+            <summary>
+            Tries to deserialize an array of objects
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadArray(System.Func{Theobald.Json.JsonReader,System.Boolean})">
             <summary>
             Tries to deserialize an array of objects
             </summary>
@@ -1467,6 +1489,14 @@
             </summary>
         </member>
         <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.UInt16})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonWriter.WriteTheoNumber(System.String,System.Nullable{Theobald.Common.Number})">
             <summary>
             Writes a member to an object
             <remarks>

@@ -15,12 +15,6 @@
             Flag to signal whether the array from the ArrayPool have already been returned.
             </summary>
         </member>
-        <member name="F:Theobald.Decryption.Common.ColumnDecryptionProcessor.byteReader">
-            <summary>
-            Reads bytes from the source using the read action and tries to assemble
-            utf8 characters from the read bytes.
-            </summary>
-        </member>
         <member name="F:Theobald.Decryption.Common.ColumnDecryptionProcessor.noBomEncoding">
             <summary>
             The encoding used to write the decrypted values to the target.
@@ -42,7 +36,7 @@
             The action which is called to write the results to the target destination.
             </summary>
         </member>
-        <member name="F:Theobald.Decryption.Common.ColumnDecryptionProcessor.buffer">
+        <member name="F:Theobald.Decryption.Common.ColumnDecryptionProcessor.Buffer">
             <summary>
             The read buffer. It is fetched from the dotnetcore array pool to avoid unnecessary allocations.
             The array is returned to the pool in the dispose method.
@@ -91,15 +85,24 @@
             <param name="decryptCell">The method to decrypt one single cell.</param>
             <param name="readAsync">The method to read chunks from the encrypted data.</param>
             <param name="writeAsync">The method to write the decrypted data to its destination.</param>
-            <param name="cancellationToken"></param>
+            <param name="ct"></param>
             <returns>When the last chunk of data was read from the source, processed and written to the destination.</returns>
             <exception cref="T:Theobald.Decryption.Common.DecryptionException">This means an error in the format of the encrypted data or
             corruption of the data.</exception>
         </member>
-        <member name="M:Theobald.Decryption.Common.ColumnDecryptionProcessor.WriteIfNotEmpty(System.ReadOnlySpan{System.Char})">
+        <member name="M:Theobald.Decryption.Common.ColumnDecryptionProcessor.WriteIfNotEmpty(System.String)">
             <summary>
             Wrapper for the write action.
             Simply checks if there is anything to write at all.
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Theobald.Decryption.Common.ColumnDecryptionProcessor.WriteAsBytes(System.String)">
+            <summary>
+            Wrapper for the write action.
+            Converts the provided span of chars to the target encoding.
+            Executes the write action with the decoded bytes afterwards.
             </summary>
             <param name="s"></param>
             <returns></returns>
