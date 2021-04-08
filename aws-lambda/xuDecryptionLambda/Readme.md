@@ -36,7 +36,7 @@ Modify the file to fit your needs before deploying.
 
 # Setup
 
-You have to set the triggers for your Lambda function yourself. We do not provide any presets for it.
+Xtract Universal uses the multipart api to upload the data. Hence the multipart trigger has to be configured in your lambda function.
 If you change the name of the files or the name of the handler, you also have to change the `serverless.template` file accordingly.
 
 The function code uses some environment variables, which can be set in the function's configuration tab. The function checks its environment including the variables and throws an error if one of the values can not be found.

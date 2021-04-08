@@ -1,9 +1,10 @@
 # xu-coloumn-decryption
-A collection of minimalistic sample apps to decrypt data which was extracted via XtractUniversal using the column encryption feature. XtractUniversal currently only supports the CSV Fileformat.
+A collection of minimalistic sample apps to decrypt data which was extracted via Xtract Universal using the column encryption feature. Xtract Universal currently only supports the CSV Fileformat.
+Note, that the default delimiter is ';' to match the Xtract Universal cloud destinations. The file CSV destination has ',' set as default. Set the delimiter in your file CSV destination to ';' to avoid confusion.
 
 The following terminology is used in the readme files of the sample apps:
-* target(Container/Bucket) for the place where the decrypted data will be written to. The apps assume that the private key is located there, too.
-* source(Container/Bucket) for the place where the encrypted data will arrive. This is the destination of the XtractUniversal extraction.
+* target(Container/Bucket) for the place where the decrypted data will be written to. The apps (except AWS lambda) assume that the private key is located there, too.
+* source(Container/Bucket) for the place where the encrypted data will arrive. This is the destination of the Xtract Universal extraction.
 
 ## Contents of this repository
 ### AWS Lambda Function

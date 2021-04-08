@@ -1,5 +1,5 @@
 # PEM to XML key converter
-This small application provides conversion of a normal pem formatted key as received from the AWS Key Management Service into the XML format, which is required by XtractUniversal.
+This small application provides conversion of a normal pem formatted key as received from the AWS Key Management Service into the XML format, which is required by Xtract Universal.
 
 It runs on NET 5.0.
 
