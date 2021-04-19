@@ -17,7 +17,7 @@ namespace FileDecryption
 
         private static string targetFile = "plaintext.csv";
         private static string sourceFile = "ciphertext.csv";
-        private static string metaDataFile = "metadata.json";
+        private static string metaDataFile;
         private static string keyFile = "private.xml";
 
         /// <summary>
@@ -31,6 +31,9 @@ namespace FileDecryption
             {
                 return;
             }
+
+            // build metadata file name
+            metaDataFile = $"{Path.GetFileNameWithoutExtension(sourceFile)}_metadata.json";
 
             ivArray = ArrayPool<byte>.Shared.Rent(12);
 

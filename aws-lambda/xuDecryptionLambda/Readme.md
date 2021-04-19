@@ -22,7 +22,7 @@ If already installed check if new version is available.
 dotnet tool update -g Amazon.Lambda.Tools
 ```
 
-Deploy the application in interactive mode (runtiem is netcoreapp3.1)
+Deploy the application in interactive mode (runtime is netcoreapp3.1)
 ```
 dotnet lambda deploy-function
 ```

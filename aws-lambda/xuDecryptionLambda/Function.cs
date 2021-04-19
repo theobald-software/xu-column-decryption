@@ -45,8 +45,8 @@ namespace xuDecryptionLambda
         private int partNumber = 1;
 
         // partSize is essentially the buffer size of the memory stream, which caches the data for every single part
-        private readonly int partSize = 8 * (int) Math.Pow(2, 20); // 8 MB
-        private readonly int writeThreshold = 6 * (int) Math.Pow(2, 20); // 5 MB
+        private readonly int partSize = 8 * (int)Math.Pow(2, 20); // 8 MB
+        private readonly int writeThreshold = 6 * (int)Math.Pow(2, 20); // 5 MB
 
         #endregion
 
@@ -65,7 +65,7 @@ namespace xuDecryptionLambda
             try
             {
                 ivArray = ArrayPool<byte>.Shared.Rent(12);
-                targetFileName = sourceFileName = input.Records[0].S3.Object.Key;
+                this.targetFileName = this.sourceFileName = input.Records[0].S3.Object.Key;
 
                 LambdaLogger.Log("Loading and checking source/destination buckets, file name...");
                 this.sourceBucketName = Environment.GetEnvironmentVariable("sourcebucket");
@@ -77,14 +77,14 @@ namespace xuDecryptionLambda
 
                 LambdaLogger.Log(Environment.GetEnvironmentVariable("AWS_REGION"));
                 LambdaLogger.Log("Loading ciphertext...");
-                var readRequest = new GetObjectRequest
+                GetObjectRequest readRequest = new GetObjectRequest
                 {
                     BucketName = this.sourceBucketName,
-                    Key = sourceFileName,
+                    Key = this.sourceFileName,
                 };
 
                 this.client = new AmazonS3Client(RegionEndpoint.USEast1);
-                using GetObjectResponse response = await client.GetObjectAsync(readRequest);
+                using GetObjectResponse response = await this.client.GetObjectAsync(readRequest);
                 if (response.HttpStatusCode != HttpStatusCode.OK)
                 {
                     throw new FileNotFoundException("Could not retrieve file from source bucket.");
@@ -97,19 +97,19 @@ namespace xuDecryptionLambda
                 byte[] sessionKey = await DecryptSessionKey(csvProcessor.EncryptedSessionKey);
 
                 LambdaLogger.Log(
-                    $"Preparing multipart upload with a minimal part size of {writeThreshold.ToString()} bytes");
-                outputStream = new MemoryStream(partSize);
+                    $"Preparing multipart upload with a minimal part size of {this.writeThreshold.ToString()} bytes");
+                this.outputStream = new MemoryStream(this.partSize);
                 await InitPartUploadAsync();
 
                 LambdaLogger.Log("Decrypting...");
-                using (aesGcm = new AesGcm(sessionKey))
+                using (this.aesGcm = new AesGcm(sessionKey))
                 {
                     await csvProcessor.ProcessDataAsync(DecryptCell, response.ResponseStream.ReadAsync, WritePartAsync,
                         CancellationToken.None);
                 }
 
                 LambdaLogger.Log("Completing multipart upload...");
-                if (outputStream.Length > 0)
+                if (this.outputStream.Length > 0)
                 {
                     await WritePartInternalAsync();
                 }
@@ -123,13 +123,13 @@ namespace xuDecryptionLambda
                 if (!string.IsNullOrWhiteSpace(this.uploadId))
                 {
                     // Abort the upload.
-                    var abortRequest = new AbortMultipartUploadRequest
+                    AbortMultipartUploadRequest abortRequest = new AbortMultipartUploadRequest
                     {
-                        BucketName = targetBucketName,
-                        Key = targetFileName,
-                        UploadId = uploadId
+                        BucketName = this.targetBucketName,
+                        Key = this.targetFileName,
+                        UploadId = this.uploadId
                     };
-                    await client.AbortMultipartUploadAsync(abortRequest);
+                    await this.client.AbortMultipartUploadAsync(abortRequest);
                 }
 
                 return false;
@@ -138,7 +138,7 @@ namespace xuDecryptionLambda
             {
                 // cleanup some resources
                 ArrayPool<byte>.Shared.Return(ivArray);
-                client?.Dispose();
+                this.client?.Dispose();
             }
         }
 
@@ -172,7 +172,7 @@ namespace xuDecryptionLambda
 
         private async Task<byte[]> DecryptSessionKey(byte[] encryptedSessionKey)
         {
-            using var kmsClient = new AmazonKeyManagementServiceClient();
+            using AmazonKeyManagementServiceClient kmsClient = new AmazonKeyManagementServiceClient();
             DecryptRequest aesKeyDecryptionRequest = new DecryptRequest
             {
                 EncryptionAlgorithm = EncryptionAlgorithmSpec.RSAES_OAEP_SHA_1,
@@ -206,7 +206,7 @@ namespace xuDecryptionLambda
                     do
                     {
                         current = span[position];
-                        BigInteger part = (byte) (current & 127);
+                        BigInteger part = (byte)(current & 127);
                         ret |= part << (7 * position);
                         position++;
                     } while ((current & 128) > 0);
@@ -220,16 +220,16 @@ namespace xuDecryptionLambda
                 }
             }
 
-            var rawCell = input.Span;
+            Span<byte> rawCell = input.Span;
             BigInteger ivBigInt = Read7BitBigInt(rawCell, out int encodedIvLength);
 
-            var iv = ivArray.AsSpan(0, 12);
+            Span<byte> iv = ivArray.AsSpan(0, 12);
             if (ivBigInt.TryWriteBytes(iv, out _))
             {
-                var cipherText = rawCell.Slice(encodedIvLength, rawCell.Length - 16 - encodedIvLength);
-                var tag = rawCell.Slice(rawCell.Length - 16, 16);
+                Span<byte> cipherText = rawCell.Slice(encodedIvLength, rawCell.Length - 16 - encodedIvLength);
+                Span<byte> tag = rawCell.Slice(rawCell.Length - 16, 16);
                 byte[] plainText = new byte[rawCell.Length - encodedIvLength - 16];
-                aesGcm.Decrypt(iv, cipherText, tag, plainText.AsSpan());
+                this.aesGcm.Decrypt(iv, cipherText, tag, plainText.AsSpan());
 
                 // clean iv array
                 Array.Fill<byte>(ivArray, 0);
@@ -245,23 +245,23 @@ namespace xuDecryptionLambda
 
         private async Task InitPartUploadAsync()
         {
-            var initRequest = new InitiateMultipartUploadRequest()
+            InitiateMultipartUploadRequest initRequest = new InitiateMultipartUploadRequest()
             {
-                BucketName = targetBucketName,
+                BucketName = this.targetBucketName,
                 StorageClass = S3StorageClass.Standard,
-                Key = targetFileName,
+                Key = this.targetFileName,
             };
 
             // Initiate the upload.
-            InitiateMultipartUploadResponse initResponse = await client.InitiateMultipartUploadAsync(initRequest);
-            uploadId = initResponse.UploadId;
-            tags = new List<PartETag>();
+            InitiateMultipartUploadResponse initResponse = await this.client.InitiateMultipartUploadAsync(initRequest);
+            this.uploadId = initResponse.UploadId;
+            this.tags = new List<PartETag>();
         }
 
         private async ValueTask WritePartAsync(ReadOnlyMemory<byte> data, CancellationToken cancellationToken)
         {
-            await outputStream.WriteAsync(data, cancellationToken);
-            if (outputStream.Length > writeThreshold)
+            await this.outputStream.WriteAsync(data, cancellationToken);
+            if (this.outputStream.Length > this.writeThreshold)
             {
                 await WritePartInternalAsync();
             }
@@ -269,27 +269,27 @@ namespace xuDecryptionLambda
 
         private async Task WritePartInternalAsync()
         {
-            LambdaLogger.Log($"Uploading part to position {filePosition}");
-            outputStream.Position = 0;
-            var writePartRequest = new UploadPartRequest
+            LambdaLogger.Log($"Uploading part to position {this.filePosition}");
+            this.outputStream.Position = 0;
+            UploadPartRequest writePartRequest = new UploadPartRequest
             {
-                BucketName = targetBucketName,
-                Key = targetFileName,
-                UploadId = uploadId,
-                PartNumber = partNumber,
-                PartSize = outputStream.Length,
-                FilePosition = filePosition,
-                InputStream = outputStream,
+                BucketName = this.targetBucketName,
+                Key = this.targetFileName,
+                UploadId = this.uploadId,
+                PartNumber = this.partNumber,
+                PartSize = this.outputStream.Length,
+                FilePosition = this.filePosition,
+                InputStream = this.outputStream,
             };
 
             // Upload a part and add the response to our list.
-            var resp = await client.UploadPartAsync(writePartRequest);
-            tags.Add(new PartETag(partNumber, resp.ETag));
-            filePosition += outputStream.Length;
-            LambdaLogger.Log($"Completed upload of part #{partNumber} at file position {filePosition}.");
-            partNumber++;
+            UploadPartResponse resp = await this.client.UploadPartAsync(writePartRequest);
+            this.tags.Add(new PartETag(this.partNumber, resp.ETag));
+            this.filePosition += this.outputStream.Length;
+            LambdaLogger.Log($"Completed upload of part #{this.partNumber} at file position {this.filePosition}.");
+            this.partNumber++;
             // reset stream to be ready for next write
-            outputStream.SetLength(0);
+            this.outputStream.SetLength(0);
         }
 
         private async Task CompleteMultipartUploadAsync()
@@ -297,15 +297,15 @@ namespace xuDecryptionLambda
             // Setup to complete the upload.
             CompleteMultipartUploadRequest completeRequest = new CompleteMultipartUploadRequest
             {
-                BucketName = targetBucketName,
-                Key = targetFileName,
-                UploadId = uploadId,
-                PartETags = tags,
+                BucketName = this.targetBucketName,
+                Key = this.targetFileName,
+                UploadId = this.uploadId,
+                PartETags = this.tags,
             };
 
             // Complete the upload.
             CompleteMultipartUploadResponse completeUploadResponse =
-                await client.CompleteMultipartUploadAsync(completeRequest);
+                await this.client.CompleteMultipartUploadAsync(completeRequest);
             LambdaLogger.Log(completeUploadResponse.HttpStatusCode == HttpStatusCode.OK
                 ? "Multipart upload finished successfully."
                 : $"Error when wrapping up multipart upload: {System.Text.Json.JsonSerializer.Serialize(completeUploadResponse)}");
@@ -317,13 +317,13 @@ namespace xuDecryptionLambda
 
         private async Task<string> GetMetaDataAsync()
         {
-            var readRequest = new GetObjectRequest
+            GetObjectRequest readRequest = new GetObjectRequest
             {
                 BucketName = this.sourceBucketName,
-                Key = "metadata.json"
+                Key = $"{Path.GetFileNameWithoutExtension(this.sourceFileName)}_metadata.json"
             };
 
-            using GetObjectResponse response = await client.GetObjectAsync(readRequest).ConfigureAwait(false);
+            using GetObjectResponse response = await this.client.GetObjectAsync(readRequest).ConfigureAwait(false);
             LambdaLogger.Log($"Response: {response.HttpStatusCode}");
 
             if (response.HttpStatusCode != HttpStatusCode.OK)
