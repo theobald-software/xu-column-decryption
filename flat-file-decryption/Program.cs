@@ -17,7 +17,7 @@ namespace FileDecryption
 
         private static string targetFile = "plaintext.csv";
         private static string sourceFile = "ciphertext.csv";
-        private static string metaDataFile = "metadata.json";
+        private static string metaDataFile;
         private static string keyFile = "private.xml";
 
         /// <summary>
@@ -32,23 +32,27 @@ namespace FileDecryption
                 return;
             }
 
+            // build metadata file name
+            metaDataFile = metaDataFile ?? $"{Path.GetFileNameWithoutExtension(sourceFile)}_metadata.json";
+
             ivArray = ArrayPool<byte>.Shared.Rent(12);
 
-            await using var metaDataStream = File.Open(metaDataFile, FileMode.Open, FileAccess.Read);
-            using var reader = new StreamReader(metaDataStream);
+            await using FileStream metaDataStream = File.Open(metaDataFile, FileMode.Open, FileAccess.Read);
+            using StreamReader reader = new StreamReader(metaDataStream);
 
             using CsvProcessor csvProcessor = new CsvProcessor(await reader.ReadToEndAsync());
 
             string keyXml = await File.ReadAllTextAsync(keyFile);
-            using var privateKey = new RSACryptoServiceProvider();
+            using RSACryptoServiceProvider privateKey = new RSACryptoServiceProvider();
             privateKey.FromXmlString(keyXml);
             byte[] sessionKey = privateKey.Decrypt(csvProcessor.EncryptedSessionKey, true);
 
             await using FileStream target = File.Open(targetFile, FileMode.Create, FileAccess.Write);
-            await using var fs = File.Open(sourceFile, FileMode.Open, FileAccess.Read);
+            await using FileStream fs = File.Open(sourceFile, FileMode.Open, FileAccess.Read);
             using (aesGcm = new AesGcm(sessionKey))
             {
-                await csvProcessor.ProcessDataAsync(DecryptCell, fs.ReadAsync, target.WriteAsync, CancellationToken.None);
+                await csvProcessor.ProcessDataAsync(DecryptCell, fs.ReadAsync, target.WriteAsync,
+                    CancellationToken.None);
                 ArrayPool<byte>.Shared.Return(ivArray);
             }
         }
@@ -74,7 +78,7 @@ namespace FileDecryption
                     do
                     {
                         current = span[position];
-                        BigInteger part = (byte)(current & 127);
+                        BigInteger part = (byte) (current & 127);
                         ret |= part << (7 * position);
                         position++;
                     } while ((current & 128) > 0);
@@ -88,14 +92,14 @@ namespace FileDecryption
                 }
             }
 
-            var rawCell = input.Span;
+            Span<byte> rawCell = input.Span;
             BigInteger ivBigInt = Read7BitBigInt(rawCell, out int encodedIvLength);
 
-            var iv = ivArray.AsSpan(0, 12);
+            Span<byte> iv = ivArray.AsSpan(0, 12);
             if (ivBigInt.TryWriteBytes(iv, out _))
             {
-                var cipherText = rawCell.Slice(encodedIvLength, rawCell.Length - 16 - encodedIvLength);
-                var tag = rawCell.Slice(rawCell.Length - 16, 16);
+                Span<byte> cipherText = rawCell.Slice(encodedIvLength, rawCell.Length - 16 - encodedIvLength);
+                Span<byte> tag = rawCell.Slice(rawCell.Length - 16, 16);
                 byte[] plainText = new byte[rawCell.Length - encodedIvLength - 16];
                 aesGcm.Decrypt(iv, cipherText, tag, plainText.AsSpan());
 
@@ -121,14 +125,16 @@ namespace FileDecryption
             if (args[0] == "-h" || args[0] == "--help")
             {
                 // help requested.
-                Console.WriteLine("This application provides a sample implementation to decrypt data which was encrypted via Xtract Universals using the Column Encryption feature.");
+                Console.WriteLine(
+                    "This application provides a sample implementation to decrypt data which was encrypted via Xtract Universals using the Column Encryption feature.");
                 Console.WriteLine("Usage:");
                 Console.WriteLine("fileDecryption.exe -h/--help for this help");
                 Console.WriteLine("-t/ --target \t\tpath/to/plaintext.csv");
                 Console.WriteLine("-s/ --source \t\tpath/to/ciphertext.csv");
                 Console.WriteLine("-m/ --metadata \t\tpath/to/metadata.json");
                 Console.WriteLine("-k/ --key \t\tpath/to/privateKey.xml");
-                Console.WriteLine("The switches default to the listed file name in the current directory of the executable.");
+                Console.WriteLine(
+                    "The switches default to the listed file name in the current directory of the executable.");
                 return false;
             }
 

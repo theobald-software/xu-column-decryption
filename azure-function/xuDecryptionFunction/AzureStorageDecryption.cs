@@ -27,7 +27,7 @@ namespace xuDecryptionFunction
         private static string sourceContainerName;
         private static string targetContainerName;
         private static string privateKeyFileName;
-        private static string metadataFileName = "metadata.json";
+        private static string metadataFileName;
         private static CloudBlobContainer sourceContainer;
         private static CloudBlobContainer targetContainer;
         #endregion
@@ -49,7 +49,7 @@ namespace xuDecryptionFunction
             ILogger log)
         {
             // Saving the start time for diagnostics
-            var startTime = DateTime.Now;
+            DateTime startTime = DateTime.Now;
             try
             {
                 // The function triggers for every uploaded file.
@@ -64,10 +64,11 @@ namespace xuDecryptionFunction
                 ivArray = ArrayPool<byte>.Shared.Rent(12);
                 // preparing decryption
                 log.LogInformation("Loading account and container info...");
-                var conString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+                string conString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
                 sourceContainerName = Environment.GetEnvironmentVariable("SourceContainer");
                 targetContainerName = Environment.GetEnvironmentVariable("TargetContainer");
                 privateKeyFileName = Environment.GetEnvironmentVariable("PrivateKeyFileName");
+                metadataFileName = $"{Path.GetFileNameWithoutExtension(name)}_metadata.json";
 
                 // Remove this check if you are not using a connection string
                 if (string.IsNullOrWhiteSpace(conString))
@@ -95,7 +96,7 @@ namespace xuDecryptionFunction
                 sourceContainer = blobClient.GetContainerReference(sourceContainerName);
                 targetContainer = blobClient.GetContainerReference(targetContainerName);
 
-                log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {encryptedFile.Length} Bytes");
+                log.LogInformation($"C# Blob trigger function Processed blob\n Name: {name}\n Size: {encryptedFile.Length} Bytes");
                 if (encryptedFile.Length == 0)
                 {
                     for (int retriesRemaining = 3; retriesRemaining > 0; retriesRemaining--)
@@ -119,16 +120,17 @@ namespace xuDecryptionFunction
                 }
 
                 log.LogInformation("Loading metadata...");
+                log.LogInformation($"Expected metadata file name: {metadataFileName}");
                 using CsvProcessor csvProcessor = new CsvProcessor(await GetMetaDataAsync());
 
                 log.LogInformation("Decrypting session key...");
-                using var privateKey = new RSACryptoServiceProvider();
+                using RSACryptoServiceProvider privateKey = new RSACryptoServiceProvider();
                 privateKey.FromXmlString(await GetPrivateKeyAsync());
                 // decryption AES session key
                 byte[] sessionKey = privateKey.Decrypt(csvProcessor.EncryptedSessionKey, true);
 
                 log.LogInformation("Opening target stream...");
-                CloudBlockBlob plainTextBlob = targetContainer.GetBlockBlobReference("plaintext.csv");
+                CloudBlockBlob plainTextBlob = targetContainer.GetBlockBlobReference(name);
                 await using CloudBlobStream uploadStream = await plainTextBlob.OpenWriteAsync();
 
                 // process and decrypt the data.
@@ -196,14 +198,14 @@ namespace xuDecryptionFunction
                 }
             }
 
-            var rawCell = input.Span;
+            Span<byte> rawCell = input.Span;
             BigInteger ivBigInt = Read7BitBigInt(rawCell, out int encodedIvLength);
 
-            var iv = ivArray.AsSpan(0, 12);
+            Span<byte> iv = ivArray.AsSpan(0, 12);
             if (ivBigInt.TryWriteBytes(iv, out _))
             {
-                var cipherText = rawCell.Slice(encodedIvLength, rawCell.Length - 16 - encodedIvLength);
-                var tag = rawCell.Slice(rawCell.Length - 16, 16);
+                Span<byte> cipherText = rawCell.Slice(encodedIvLength, rawCell.Length - 16 - encodedIvLength);
+                Span<byte> tag = rawCell.Slice(rawCell.Length - 16, 16);
                 byte[] plainText = new byte[rawCell.Length - encodedIvLength - 16];
                 aesGcm.Decrypt(iv, cipherText, tag, plainText.AsSpan());
 
@@ -230,7 +232,7 @@ namespace xuDecryptionFunction
                 throw new FileNotFoundException("No key file found. Aborting decryption");
             }
 
-            using var sr = new StreamReader(await blob.OpenReadAsync());
+            using StreamReader sr = new StreamReader(await blob.OpenReadAsync());
             return await sr.ReadToEndAsync();
         }
 
@@ -249,7 +251,7 @@ namespace xuDecryptionFunction
                 throw new FileNotFoundException("No meta data file found. Aborting decryption");
             }
 
-            using var sr = new StreamReader(await blob.OpenReadAsync());
+            using StreamReader sr = new StreamReader(await blob.OpenReadAsync());
             return await sr.ReadToEndAsync();
         }
     }
