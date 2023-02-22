@@ -7,7 +7,7 @@
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "xuDecryptionLambda::xuDecryptionLambda.Function::FunctionHandler",
-        "Runtime": "dotnetcore3.1",
+        "Runtime": "dotnet6",
         "CodeUri": "",
         "Timeout": 30,
       }

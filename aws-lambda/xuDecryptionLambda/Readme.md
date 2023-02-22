@@ -10,7 +10,7 @@ You may edit the template to customize the function or add more functions and ot
 
 # Build and Deployment
 
-You can deploy your application using [.NETCore](https://dotnet.microsoft.com/download/dotnet-core/3.1) in combination with the [Amazon.Lambda.Tools Global Tool](https://github.com/aws/aws-extensions-for-dotnet-cli#aws-lambda-amazonlambdatools) from the command line.
+You can deploy your application using [.NET6.0](https://dotnet.microsoft.com/download/dotnet) in combination with the [Amazon.Lambda.Tools Global Tool](https://github.com/aws/aws-extensions-for-dotnet-cli#aws-lambda-amazonlambdatools) from the command line.
 
 Install Amazon.Lambda.Tools Global Tools if not already installed.
 ```
