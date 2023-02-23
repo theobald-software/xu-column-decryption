@@ -8,10 +8,10 @@
     "profile"     : "",
     "region"      : "us-east-1",
     "configuration" : "Release",
-    "framework"     : "netcoreapp3.1",
+    "framework"     : "dotnet6",
     "s3-prefix"     : "xuDecryptionLambda/",
     "template"      : "serverless.template",
     "template-parameters" : "",
-    "function-name"       : "XUColumnDecryption",
-    "function-runtime"    : "netcoreapp3.1"
+    "function-name"       : "XuColumnDecryption",
+    "function-runtime"    : "dotnet6"
 }

@@ -1,4 +1,4 @@
-# xu-coloumn-decryption
+# xu-column-decryption
 A collection of minimalistic sample apps to decrypt data which was extracted via Xtract Universal using the column encryption feature. Xtract Universal currently only supports the CSV Fileformat.
 Note, that the default delimiter is ';' to match the Xtract Universal cloud destinations. The file CSV destination has ',' set as default. Set the delimiter in your file CSV destination to ';' to avoid confusion.
 

@@ -4,165 +4,11 @@
         <name>Theobald.Common</name>
     </assembly>
     <members>
-        <member name="T:Theobald.Common.AbapString">
+        <member name="T:Theobald.Common.AsyncCountdown">
             <summary>
-            Contains methods for parsing string representations of ABAP values
-            </summary>
-        </member>
-        <member name="M:Theobald.Common.AbapString.ParseUnsignedInteger(System.String)">
-            <summary>
-            Parses a string representation of an ABAP unsigned integer
-            </summary>
-            <param name="value">The string representation of the ABAP unsigned integer</param>
-            <returns>The typed value of the string representation</returns>
-        </member>
-        <member name="M:Theobald.Common.AbapString.ParseSignedInteger(System.String)">
-            <summary>
-            Parses a string representation of an ABAP signed integer
-            </summary>
-            <param name="value">The string representation of the ABAP signed integer</param>
-            <returns>The typed value of the string representation</returns>
-        </member>
-        <member name="M:Theobald.Common.AbapString.ParsePackedNumber(System.String)">
-            <summary>
-            Parses a string representation of an ABAP packed number
-            </summary>
-            <param name="value">The string representation of the ABAP packed number</param>
-            <returns>The typed value of the string representation</returns>
-        </member>
-        <member name="M:Theobald.Common.AbapString.ParseFloatingPoint(System.String)">
-            <summary>
-            Parses a string representation of an ABAP floating point value 
-            </summary>
-            <param name="value">The string representation of the ABAP floating point value</param>
-            <returns>The typed value of the string representation</returns>
-        </member>
-        <member name="M:Theobald.Common.AbapString.ParseByteSequence(System.String)">
-            <summary>
-            Parses a string representation of an ABAP byte sequence
-            </summary>
-            <param name="value">The string representation of the ABAP byte sequence</param>
-            <returns>The typed value of the string representation</returns>
-        </member>
-        <member name="M:Theobald.Common.AbapString.ParseBoolean(System.String)">
-            <summary>
-            Parses a string representation of an ABAP boolean
-            </summary>
-            <param name="value">The string representation of the ABAP boolean</param>
-            <returns>The typed value of the string representation</returns>
-        </member>
-        <member name="M:Theobald.Common.AbapString.TryParseTime(System.String,System.TimeSpan@)">
-            <summary>
-            Try to parse a string representation of an ABAP TIMS (time)
-            </summary>
-            <param name="value">The string representation of the ABAP Time (TIMS)</param>
-            <param name="timeSpanVal">If the parser succeeds, this variable shall contain a 
-            TimeSpan between 00:00:00 and 23:59:59, otherwise TimeSpan.Zero </param>
-            <returns>
-            True if the parser succeeds, false otherwise
-            </returns>
-        </member>
-        <member name="M:Theobald.Common.AbapString.Parse(System.String,Theobald.Common.AbapType)">
-            <summary>
-            Parses an ABAP string representation
-            </summary>
-            <param name="value">The string representation</param>
-            <param name="abapType">The ABAP type of the representation</param>
-            <returns>The typed value of the string representation</returns>
-        </member>
-        <member name="M:Theobald.Common.AbapString.ReplaceStar(System.String,System.String)">
-            <summary>
-            Replaces the star in string representation of SAP table values which are
-            too big for RFC_READ_TABLE
-            </summary>
-            <param name="value">The string representation of the SAP table value</param>
-            <param name="starReplacement">The replacement for the star</param>
-            <returns>The string representation where the star has been replaced</returns>
-        </member>
-        <member name="F:Theobald.Common.AbapType.None">
-            <summary>
-            ABAP type undefined
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.OneByteInteger">
-            <summary>
-            Unsigned integer, 1 byte (predefined type b, DDIC type INT1)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.TwoByteInteger">
-            <summary>
-            Signed integer, 2 bytes (predefined type s, DDIC type INT2)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.FourByteInteger">
-            <summary>
-            Signed integer, 4 bytes (predefined type i, DDIC type INT4)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.EightByteInteger">
-            <summary>
-            Signed integer, 8 bytes (predefined type int8, DDIC type INT8)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.FloatingPoint">
-            <summary>
-            Floating point number, 8 bytes (predefined type f, DDIC type FLTP)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.ByteSequence">
-            <summary>
-            Uninterpreted byte sequence, 1 - 65,535 bytes (predefined type x, DDIC type RAW)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.CharacterString">
-            <summary>
-            Character string, 1 - 65,535 characters (predefined type c, DDIC type CHAR)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.NumericCharacterString">
-            <summary>
-            Character string (only digits), 1 - 65,535 characters (predefined type n, DDIC type NUMC)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.Date">
-            <summary>
-            Date field (YYYYMMDD), 8 characters (predefined type D, DDIC type DATS)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.Time">
-            <summary>
-            Time field (HHMMSS), 6 characters (predefined type T, DDIC type TIMS)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.PackedNumber">
-            <summary>
-            Packed number (decimal representation), 1 - 16 bytes (predefined type P, DDIC type DEC)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.ByteSequenceOfVariableLength">
-            <summary>
-            Uninterpreted byte sequence, variable length (predefined type xstring, DDIC type RAWSTRING)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.CharacterStringOfVariableLength">
-            <summary>
-            Character string, variable length (predefined type string, DDIC type STRING)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.DecimalFloatingPoint16">
-            <summary>
-            Decimal floating point number with 16 places (predefined type decfloat16, DDIC type DF16_DEC, DF16_RAW, DF16_SCL)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.DecimalFloatingPoint34">
-            <summary>
-            Decimal floating point number with 34 places (predefined type decfloat16, DDIC type DF34_DEC)
-            </summary>
-        </member>
-        <member name="F:Theobald.Common.AbapType.TimeStamp">
-            <summary>
-            TimeStamp accurate to 100 nanoseconds internally stored as <see cref="F:Theobald.Common.AbapType.EightByteInteger" />
-            (predefined type p, DDIC type UTCLONG)
+            Assumption: No increments after zero has been reached.
+            This can be used to count things, then stop creating new things
+            and wait until all things are gone.
             </summary>
         </member>
         <member name="M:Theobald.Common.Csv.CsvFormatException.#ctor">
@@ -180,6 +26,29 @@
             Initializes a new instance of the <see cref="T:Theobald.Common.Csv.CsvFormatException"/> class with a specified error message
             and a reference to the inner exception that is teh cause of this exception.
             </summary>
+        </member>
+        <member name="T:Theobald.Common.Csv.CsvLineReader">
+            <summary>
+            Wraps a CsvReader and a StreamReader for more convenient access to each Line of a Csv stream.
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvLineReader.#ctor(System.Char,System.Int32)">
+            <summary>Creates a CsvLineReader using the default Row Separator CrLf.</summary>
+            <param name="columnSeparator">Column Separator character.</param>
+            <param name="expectedCellCount">Expected number of Cells each row (used as Capacity for the internal list).</param>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvLineReader.#ctor(System.Char,System.Char,System.Int32)">
+            <summary>Creates a CsvLineReader with a custom row separator character.</summary>
+            <param name="columnSeparator">Column separator character.</param>
+            <param name="rowSeparator">Row separator character.</param>
+            <param name="expectedCellCount">Expected number of Cells each row (used as Capacity for the internal list).</param>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvLineReader.Lines">
+            <summary>Returns an enumerable of strings for each completely read Line in the CSV data stream.</summary>
+            <remarks>
+            You must immediately consume/store the return value of this method. The underlying collection will
+            be cleared when advancing the reader.
+            </remarks>
         </member>
         <member name="T:Theobald.Common.Csv.CsvReaderState">
             <summary>
@@ -232,7 +101,7 @@
                          HandleLineBreak();
                          HandleCell(reader.Current.Value);
                          break;
-                     case CsvReaderStateNeedsData:
+                     case CsvReaderState.NeedsData:
                          int bytesRead = await stream.ReadAsync(buffer);
                          if (0 == bytesRead)
                          {
@@ -240,7 +109,7 @@
                          }
                          else
                          {
-                             reader.Feed(new ArraySegment&lt;byte&gt;(buffer));
+                             reader.Feed(new ArraySegment&lt;byte&gt;(buffer, 0, bytesRead));
                          }
                          break;
                      case CsvReaderState.EndOfData:
@@ -309,8 +178,16 @@
         <member name="M:Theobald.Common.Csv.CsvReader.#ctor(System.Char)">
             <summary>
                 Creates a new instance of the new <see cref="T:Theobald.Common.Csv.CsvReader" /> class with the given delimiter.
+                The row delimiter is CrLf.
             </summary>
-            <param name="delimiter"></param>
+            <param name="delimiter">specifies how columns are delimited</param>
+        </member>
+        <member name="M:Theobald.Common.Csv.CsvReader.#ctor(System.Char,System.Char)">
+            <summary>
+                Creates a new instance of the new <see cref="T:Theobald.Common.Csv.CsvReader" /> class with the given delimiter.
+            </summary>
+            <param name="columnDelimiter">specifies how columns are delimited</param>
+            <param name="rowDelimiter">specifies how rows are delimited</param>
         </member>
         <member name="M:Theobald.Common.Csv.CsvReader.Feed(System.ArraySegment{System.Char})">
             <summary>
@@ -388,9 +265,39 @@
             Consumes all the <paramref name="bytes"/> and decodes them into <see cref="T:System.Char"/>s
             </summary>
         </member>
-        <member name="M:Theobald.Common.Encoding.CharsToLines.SplitCrLf(System.ArraySegment{System.Char})">
+        <member name="P:Theobald.Common.Encoding.BytesToLines.Cr">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Encoding.BytesToLines.Lf">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Encoding.BytesToLines.TokenSize">
+            <inheritdoc />
+        </member>
+        <member name="M:Theobald.Common.Encoding.CharsToLines.#ctor(System.Char)">
             <summary>
-            Splits the <paramref name="charsSegment"/> into sub-segments at CRLF newline.
+            If this ctor is used the <see cref="P:Theobald.Common.Encoding.CharsToLines.Lf"/> property is overwritten to use a single token as a row delimiter
+            </summary>
+            <param name="rowDelimiter"></param>
+        </member>
+        <member name="P:Theobald.Common.Encoding.CharsToLines.Cr">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Encoding.CharsToLines.Lf">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Encoding.CharsToLines.TokenSize">
+            <inheritdoc />
+        </member>
+        <member name="T:Theobald.Common.Encoding.CharsToQuotes">
+            <summary>
+            Runs over an <see cref="T:System.ArraySegment`1"/> and exposes a state to show whether
+            the reader is currently in a quote area or not.
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Encoding.DataToLines`1.SplitCrLf(System.ArraySegment{`0})">
+            <summary>
+            Splits the <paramref name="segment"/> into sub-segments at CRLF newline.
             <remarks>
                 The CRLFs are not part of the sub-segments.
                 Chars at the end of the segment, that are not followed by a CRLF, are stored in an
@@ -398,17 +305,17 @@
             </remarks>
             </summary>
         </member>
-        <member name="M:Theobald.Common.Encoding.CharsToLines.Flush">
+        <member name="M:Theobald.Common.Encoding.DataToLines`1.Flush">
             <summary>
             Returns the saved characters that didn't make a full line yet.
             <remarks>This might be useful, if the last line is not followed by a newline</remarks>
             </summary>
         </member>
-        <member name="T:Theobald.Common.Encoding.CharsToQuotes">
+        <member name="M:Theobald.Common.Encoding.DataToLines`1.GetRemaining">
             <summary>
-            Runs over an <see cref="T:System.ArraySegment`1"/> and exposes a state to show whether
-            the reader is currently in a quote area or not.
+            Return the unprocessed data regardless of its potential line breaks.
             </summary>
+            <returns></returns>
         </member>
         <member name="T:Theobald.Common.Encoding.Gb18030NoPreamble">
             <summary>
@@ -433,9 +340,15 @@
             <param name="delimiter"></param>
             <returns></returns>
         </member>
-        <member name="T:Theobald.Common.Fnv1aHash">
+        <member name="T:Theobald.Common.Encoding.LittleEndianBase128">
             <summary>
-            Gets the Fowler–Noll–Vo FNV-1a hash of a string.
+            Variable-length encoding for integers.
+            https://en.wikipedia.org/wiki/LEB128
+            </summary>
+        </member>
+        <member name="T:Theobald.Common.Fnv1aHash32">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a 32 bits hash of a string.
             Can be used as a checksum, or to significantly reduce
             the probability of collisions when shortening strings.
             <remarks>
@@ -444,12 +357,73 @@
             </remarks>
             </summary>
         </member>
-        <member name="M:Theobald.Common.Fnv1aHash.Calculate(System.IO.Stream)">
+        <member name="M:Theobald.Common.Fnv1aHash32.CalculateAsync(System.Func{System.Threading.Tasks.Task{System.ArraySegment{System.Byte}}})">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a hash of a series of data chunks.
+            </summary>
+            <param name="readAsync">
+                Reads next chunk of input data. This func is called until it returns a
+                segment with 0 length.
+                <remarks>
+                    It is required that the segment of the previous read is still valid
+                    while the current read is in progress, until the next read begins.
+                    I. e. you could provide e. g. a func that uses two alternating buffers.
+                </remarks>
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Theobald.Common.Fnv1aHash32.CalculateAsync(System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a hash of a stream asynchronously. 
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Fnv1aHash32.Calculate(System.IO.Stream@)">
             <summary>
             Gets the Fowler–Noll–Vo FNV-1a hash of a stream. 
             </summary>
         </member>
-        <member name="M:Theobald.Common.Fnv1aHash.Calculate(System.String)">
+        <member name="M:Theobald.Common.Fnv1aHash32.Calculate(System.String@)">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a hash of a string. 
+            </summary>
+        </member>
+        <member name="T:Theobald.Common.Fnv1aHash64">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a 64 bits hash of a string.
+            Can be used as a checksum, or to significantly reduce
+            the probability of collisions when shortening strings.
+            <remarks>
+            Homepage of Landon Curt Noll, the 'N' in FNV:
+            http://www.isthe.com/chongo/tech/comp/fnv/index.html
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Fnv1aHash64.CalculateAsync(System.Func{System.Threading.Tasks.Task{System.ArraySegment{System.Byte}}})">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a hash of a series of data chunks.
+            </summary>
+            <param name="readAsync">
+                Reads next chunk of input data. This func is called until it returns a
+                segment with 0 length.
+                <remarks>
+                    It is required that the segment of the previous read is still valid
+                    while the current read is in progress, until the next read begins.
+                    I. e. you could provide e. g. a func that uses two alternating buffers.
+                </remarks>
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Theobald.Common.Fnv1aHash64.CalculateAsync(System.IO.Stream,System.Threading.CancellationToken)">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a hash of a stream asynchronously. 
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Fnv1aHash64.Calculate(System.IO.Stream@)">
+            <summary>
+            Gets the Fowler–Noll–Vo FNV-1a hash of a stream. 
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Fnv1aHash64.Calculate(System.String@)">
             <summary>
             Gets the Fowler–Noll–Vo FNV-1a hash of a string. 
             </summary>
@@ -478,6 +452,27 @@
             (deleting files on Windows is not atomic).
             </summary>
         </member>
+        <member name="M:Theobald.Common.IoHelper.OpenFileRetryWriteAsync(System.String,System.IO.FileMode,System.IO.FileShare,System.Threading.CancellationToken)">
+            <summary>
+            Tries to open a file for writing.
+            If the file is currently in use, waits and retries a few times.
+            Creates all directories and subdirectories in the specified path
+            unless they already exist or the <paramref name="fileMode"/> expects the file to exist.
+            </summary>
+            <remarks>
+            The file could be in use because it is currently being deleted.
+            It is currently unknown what happens, when directories of the path are being
+            created/deleted in parallel.
+            </remarks>
+            <exception cref="T:Theobald.Common.FileExistsException"/>
+        </member>
+        <member name="M:Theobald.Common.IoHelper.OpenFileRetryReadAsync(System.String,System.IO.FileShare,System.Threading.CancellationToken)">
+            <summary>
+            Tries to open a file for reading.
+            If the file is currently in use, waits and retries a few times.
+            <see cref="T:System.IO.FileNotFoundException"/> exception is thrown if the file does not exist.
+            </summary>
+        </member>
         <member name="M:Theobald.Common.IoHelper.GetHResult(System.IO.IOException)">
             <summary>
             Gets the HRESULT in .NET Framework versions before 4.5
@@ -487,6 +482,7 @@
             <summary>
             Tries to open a file for reading.
             If the file is currently in use, waits and retries a few times.
+            <see cref="T:System.IO.FileNotFoundException"/> exception is thrown if the file does not exist.
             </summary>
         </member>
         <member name="M:Theobald.Common.IoHelper.OpenOrCreateFileRetryReadWrite(System.String)">
@@ -537,33 +533,178 @@
             numeric types.
             </summary>
         </member>
-        <member name="T:Theobald.Common.SapLanguageKey">
+        <member name="T:Theobald.Common.Security.CertificatePinningState">
             <summary>
-            Converts between 1-character proprietary SAP language keys and
-            2-character ISO 639-1 language keys (also used by SAP)
+            Applies certificate pinning with the supplied public key information.
+            If the public key information is null or empty, the first publicKeyInformation available is pinned
+            and used for subsequent validations.
+            It can be extracted afterwards.
             </summary>
         </member>
-        <member name="M:Theobald.Common.SapLanguageKey.OneToTwoCharKey(System.String)">
+        <member name="P:Theobald.Common.Security.CertificatePinningState.PinnedPublicKeyInformation">
             <summary>
-            Converts an 1-character SAP language key to a 2-character ISO 639-1 language key
+            Holds the public key information of the pinned key.
             </summary>
-            <param name="oneCharKey">1-character SAP language key</param>
-            <returns>2-character ISO 639-1 language key</returns>
-            <exception cref="T:System.ArgumentException"/>
         </member>
-        <member name="M:Theobald.Common.SapLanguageKey.TwoToOneCharKey(System.String)">
+        <member name="M:Theobald.Common.Security.CertificatePinningState.#ctor(System.String)">
             <summary>
-            Converts a 2-character ISO 639-1 language key to an 1-character SAP language key
+            Create a new configuration for a SecureNetworkingFactory object, with the default certificate pinning
+            logic, respecting the given public key information.
             </summary>
-            <param name="twoCharKey">2-character ISO 639-1 language key</param>
-            <returns>1-character SAP language key</returns>
-            <exception cref="T:System.ArgumentException"/>
+            <param name="pinnedPublicKeyInformation"></param>
         </member>
-        <member name="M:Theobald.Common.SapLanguageKey.GetOneCharKey(System.String)">
+        <member name="M:Theobald.Common.Security.CertificatePinningState.BuildCallback">
             <summary>
-            Returns a matching 1-character SAP language key
+            
             </summary>
-            <exception cref="T:System.ArgumentException"/>
+            <returns></returns>
+        </member>
+        <member name="T:Theobald.Common.Security.HttpsWebRequest">
+            <summary>
+            This is a wrapper class to make the error handling easier for the user.
+            The inheritance is only here to keep the interface intact.
+            All methods and properties are relayed to the internal HttpWebRequest object.
+            </summary>
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.ServerCertificateValidationCallback">
+            <summary>Gets or sets a callback function to validate the server certificate.</summary>
+            <returns>A callback function to validate the server certificate.</returns>
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.Method">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.Headers">
+            <inheritdoc />
+        </member>
+        <member name="M:Theobald.Common.Security.HttpsWebRequest.Abort">
+            <inheritdoc />
+        </member>
+        <member name="M:Theobald.Common.Security.HttpsWebRequest.GetRequestStream">
+            <inheritdoc />
+        </member>
+        <member name="M:Theobald.Common.Security.HttpsWebRequest.GetRequestStreamAsync">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.CachePolicy">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.ConnectionGroupName">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.ContentLength">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.ContentType">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.RequestUri">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.Timeout">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.UseDefaultCredentials">
+            <inheritdoc />
+        </member>
+        <member name="M:Theobald.Common.Security.HttpsWebRequest.InitializeLifetimeService">
+            <inheritdoc />
+        </member>
+        <member name="P:Theobald.Common.Security.HttpsWebRequest.Credentials">
+            <inheritdoc />
+        </member>
+        <member name="M:Theobald.Common.Security.HttpsWebRequest.GetResponse">
+            <inheritdoc />
+        </member>
+        <member name="M:Theobald.Common.Security.HttpsWebRequest.GetResponseAsync">
+            <inheritdoc />
+        </member>
+        <member name="T:Theobald.Common.Security.Pbkdf2Hash">
+            <summary>
+            Simple class that provides utility to create pbkdf2 hashes.
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Security.Pbkdf2Hash.Compute(System.String,System.Byte[])">
+            <summary>
+            Gets a 32 byte long salted hash for a <see cref="T:System.String"/> using pbkdf2 with 10000 iterations.
+            </summary>
+            <param name="key">The string to hash.</param>
+            <param name="salt">The salt for additional security. Has to be at least eight bytes in length.</param>
+            <returns>An array of 32 bytes that represent the hash.</returns>
+        </member>
+        <member name="M:Theobald.Common.Security.Pbkdf2Hash.Compute(System.String,System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Gets a salted hash for a <see cref="T:System.String"/> using pbkdf2.
+            </summary>
+            <param name="key">The string to hash.</param>
+            <param name="salt">The salt for additional security. Has to be at least eight bytes in length.</param>
+            <param name="length">The length of the hash to compute.</param>
+            <param name="iterations">The iteration count for the algorithm.</param>
+            <returns>An array of bytes that represent the hash.</returns>
+        </member>
+        <member name="M:Theobald.Common.Security.SecureNetworkingFactory.NewSslStream(Theobald.Common.Security.TlsState,System.IO.Stream,System.Boolean,System.Net.Security.LocalCertificateSelectionCallback,System.Net.Security.EncryptionPolicy)">
+            <summary>
+            
+            </summary>
+            <param name="config"></param>
+            <param name="innerStream"></param>
+            <param name="leaveInnerStreamOpen"></param>
+            <param name="selectionCallback"></param>
+            <param name="encryptionPolicy"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Theobald.Common.Security.SecureNetworkingFactory.NewHttpsWebRequest(Theobald.Common.Security.TlsState,System.Uri,Theobald.Common.Http.HttpMethod)">
+            <summary>
+            Creates a new HttpWebRequest object with the given uri and method.
+            The instance has a custom certificate validation callback attached, which provides better
+            error message and custom logic, which is taken from the Config property.
+            </summary>
+            <param name="config"></param>
+            <param name="uri"></param>
+            <param name="method"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Theobald.Common.Security.SecureNetworkingFactory.TrySanitizeCertificateValidationError(System.Security.Cryptography.X509Certificates.X509Chain,System.Net.Security.SslPolicyErrors,System.String@)">
+            <summary>
+            We have to write the better message to the config object, because the ssl stream expects a return value.
+            If we would fail up the stack, weird behavior happens.
+            </summary>
+            <param name="chain"></param>
+            <param name="errors"></param>
+            <param name="message"></param>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="T:Theobald.Common.Security.TlsState">
+             <summary>
+             Default class for creating instances of HttpWebRequest and SslStream.
+             It only holds the state information and is a blueprint for inheritance.
+            
+             Call config.ThrowOnValidationError in the catch block of your code to get an authentication exception with the
+             improved error message.
+             </summary>
+        </member>
+        <member name="P:Theobald.Common.Security.TlsState.ErrorMessage">
+            <summary>
+            The first error message which was emitted in the validation process.
+            The validation fails after the first error, so there never is more than one error (message).
+            </summary>
+        </member>
+        <member name="P:Theobald.Common.Security.TlsState.ConnectionState">
+            <summary>
+            The state, the connection was in after the validation callback executed.
+            </summary>
+        </member>
+        <member name="M:Theobald.Common.Security.TlsState.ThrowOnValidationFailureWithInner(System.Exception)">
+            <summary>
+            Throws an appropriate exception if the certificate validation failed.
+            </summary>
+            <param name="inner">The exception is attached to the new exception as its inner exception</param>
+            <exception cref="T:System.Security.Authentication.AuthenticationException"></exception>
+        </member>
+        <member name="T:Theobald.Common.Security.TlsConnectionState">
+            <summary>
+            The state of the validation. Set this in your custom callback to be correctly handled
+            by the ThrowOnValidationError methods.
+            </summary>
         </member>
         <member name="T:Theobald.Common.StringFilter">
             <summary>
@@ -1226,16 +1367,32 @@
             be interpreted as <see cref="T:System.Boolean" />.
             </summary>
         </member>
-        <member name="M:Theobald.Json.JsonReader.ReadDateTime">
+        <member name="M:Theobald.Json.JsonReader.ReadTimestamp">
             <summary>
             Reads the next token and returns its value.
-            Throws an exception if it cannot be interpreted as a DateTime
+            Throws an exception if it cannot be interpreted as 
+            an IS0 8601 timestamp, precision is milliseconds.
+            <example>19840523T133337.425Z</example>
             </summary>
         </member>
-        <member name="M:Theobald.Json.JsonReader.ReadTimeSpan">
+        <member name="M:Theobald.Json.JsonReader.ReadDuration">
             <summary>
             Reads the next token and returns its value.
-            Throws an exception if it cannot be interpreted as a TimeSpan
+            Throws an exception if it cannot be interpreted as 
+            an IS0 8601 time duration, precision is milliseconds.
+            <example>PT23H42M13.337S</example>
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadDate">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it cannot be interpreted as a date in format yyyy-MM-dd.
+            </summary>
+        </member>
+        <member name="M:Theobald.Json.JsonReader.ReadTime">
+            <summary>
+            Reads the next token and returns its value.
+            Throws an exception if it cannot be interpreted as a time in format HH:mm:ss.
             </summary>
         </member>
         <member name="M:Theobald.Json.JsonReader.ReadBytes">
@@ -1363,7 +1520,7 @@
              ATTENTION!
              Please consider redesigning your nested structure
              before you increase the size of this array!
-             TEN levels of nesting should be PLENTY for
+             23 levels of nesting should be PLENTY for
              all sanely designed structures!
              </remarks>
         </member>
@@ -1520,6 +1677,14 @@
             </remarks>
             </summary>
         </member>
+        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.UInt64})">
+            <summary>
+            Writes a member to an object
+            <remarks>
+            Member is omitted if <paramref name="nullable"/> has no value
+            </remarks>
+            </summary>
+        </member>
         <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.Int16})">
             <summary>
             Writes a member to an object
@@ -1593,18 +1758,26 @@
             </remarks>
             </summary>
         </member>
-        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.DateTime})">
+        <member name="M:Theobald.Json.JsonWriter.WriteTimestamp(System.String,System.Nullable{System.DateTime})">
             <summary>
-            Writes a DateTime member to an object, precision is milliseconds.
+            Writes an IS0 8601 timestamp, precision is milliseconds.
+            <example>19840523T133337.425Z</example>
             <remarks>
+            This format is incompatible with the JavaScript Date object,
+            but compatible with Temporal.Instant https://tc39.es/proposal-temporal/docs/instant.html
+            
             Member is omitted if <paramref name="nullable"/> has no value
             </remarks>
             </summary>
         </member>
-        <member name="M:Theobald.Json.JsonWriter.Write(System.String,System.Nullable{System.TimeSpan})">
+        <member name="M:Theobald.Json.JsonWriter.WriteDuration(System.String,System.Nullable{System.TimeSpan})">
             <summary>
-            Writes a TimeSpan member to an object, precision is milliseconds.
+            Writes an IS0 8601 duration without date, precision is milliseconds.
+            <example>PT23H42M13.337S</example>
             <remarks>
+            This format is incompatible with the JavaScript Date object,
+            but compatible with Temporal.Duration https://tc39.es/proposal-temporal/docs/duration.html
+            
             Member is omitted if <paramref name="nullable"/> has no value
             </remarks>
             </summary>
@@ -1612,16 +1785,62 @@
         <member name="M:Theobald.Json.JsonWriter.WriteDate(System.String,System.Nullable{System.DateTime})">
             <summary>
             Writes a Date (yyyy-MM-dd) member to an object.
+            This format is compatible with both the JavaScript Date object and Temporal.PlainDate
+            https://tc39.es/proposal-temporal/docs/plaindate.html
             </summary>
-            <param name="name"></param>
-            <param name="nullable"></param>
         </member>
-        <member name="M:Theobald.Json.JsonWriter.WriteTime(System.String,System.Nullable{System.DateTimeOffset})">
+        <member name="M:Theobald.Json.JsonWriter.WriteTime(System.String,System.Nullable{System.TimeSpan})">
             <summary>
             Writes a Time (HH:mm:ss) member to an object, precision is seconds.
+            This format is incompatible with the JavaScript Date object,
+            but compatible with Temporal.PlainTime https://tc39.es/proposal-temporal/docs/plaintime.html
             </summary>
-            <param name="name"></param>
-            <param name="nullable"></param>
+        </member>
+        <member name="T:Theobald.Logging.ILog">
+            <summary>
+            Defines basic methods for logging.
+            <remarks>
+                Use <see cref="M:Theobald.Logging.ILogExtensions.WithSource(Theobald.Logging.ILog,System.String@)"/> to add a log source to an <see cref="T:Theobald.Logging.ILog"/> instance,
+                and <see cref="P:Theobald.Logging.LogWithSource.WithoutSource"/> to remove it.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.ILog.Log(System.DateTime@,System.String@,Theobald.Logging.LogLevel@,System.String@)">
+            <summary>
+            Appends a log entry for everything but exceptions.
+            <remarks>
+                Typically not to be used directly. Use <see cref="M:Theobald.Logging.ILogExtensions.WithSource(Theobald.Logging.ILog,System.String@)"/> to add a log source first.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.ILog.Log(System.String@,System.Exception@,System.String@)">
+            <summary>
+            Appends a log entry for an exception.
+            <remarks>
+                Typically not to be used directly. Use <see cref="M:Theobald.Logging.ILogExtensions.WithSource(Theobald.Logging.ILog,System.String@)"/> to add a log source first.
+            </remarks>
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.ILog.Start(System.DateTime@)">
+            <summary>
+            Starts the log.
+            </summary>
+            <param name="startedAt">
+                The timestamp, that identifies the log,
+                and represents the base for relative timestamps of its entries.
+            </param>
+        </member>
+        <member name="M:Theobald.Logging.ILogExtensions.StartNow(Theobald.Logging.ILog)">
+            <summary>
+            Starts the log now.
+            <seealso cref="M:Theobald.Logging.ILog.Start(System.DateTime@)"/>
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.ILogExtensions.WithSource(Theobald.Logging.ILog,System.String@)">
+            <summary>
+            Adds a log source to the basic <paramref name="log"/>.
+            <seealso cref="P:Theobald.Logging.LogWithSource.WithoutSource"/>
+            </summary>
         </member>
         <member name="T:Theobald.Logging.LogLevel">
             <summary>
@@ -1706,7 +1925,7 @@
             and don't want our lines to get mixed up by parallel calls.
             </summary>
         </member>
-        <member name="M:Theobald.Logging.LoggerBase.MillisecondsFloorUtc(System.DateTime)">
+        <member name="M:Theobald.Logging.LoggerBase.MillisecondsFloorUtc(System.DateTime@)">
             <summary>
             Cuts off all values that are more precise than milliseconds
             <exception cref="T:System.ArgumentOutOfRangeException">
@@ -1721,7 +1940,7 @@
             Creates a separate <see cref="T:Theobald.Logging.LogEntry"/> for each line of <paramref name="message"/>
             </summary>
         </member>
-        <member name="M:Theobald.Logging.LoggerMultiSplitting.NewEntry(System.DateTime,Theobald.Logging.LogLevel,System.String,System.String)">
+        <member name="M:Theobald.Logging.LoggerMultiSplitting.NewEntry(System.DateTime@,Theobald.Logging.LogLevel@,System.String@,System.String@)">
             <summary>
             Automatically starts a new log after 24h.
             This requires log entries to arrive ordered by timestamp.
@@ -1731,6 +1950,70 @@
             <summary>
             Increases the current timestamp by one millisecond
             until it results in a new log file
+            </summary>
+        </member>
+        <member name="T:Theobald.Logging.LogWithSource">
+            <summary>
+            An <see cref="T:Theobald.Logging.ILog"/> instance with a defined log source.
+            The log source is just an arbitrary string identifier that will appear in each log entry.
+            <remarks>
+                Use <see cref="M:Theobald.Logging.ILogExtensions.WithSource(Theobald.Logging.ILog,System.String@)"/> to add a log source to an <see cref="T:Theobald.Logging.ILog"/> instance,
+                and <see cref="P:Theobald.Logging.LogWithSource.WithoutSource"/> to remove it.
+            </remarks>
+            </summary>
+        </member>
+        <member name="P:Theobald.Logging.LogWithSource.WithoutSource">
+            <summary>
+            Returns the basic log with no source associated.
+            <seealso cref="M:Theobald.Logging.ILogExtensions.WithSource(Theobald.Logging.ILog,System.String@)"/>
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.LogWithSource.#ctor(Theobald.Logging.ILog@,System.String@)">
+            <summary>
+            Initializes a new instance. Consider using <see cref="M:Theobald.Logging.ILogExtensions.WithSource(Theobald.Logging.ILog,System.String@)"/> instead.
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.LogWithSource.FormatAndLog(Theobald.Logging.LogLevel@,System.String@,System.Object[])">
+            <summary>
+            Applies <see cref="M:System.String.Format(System.IFormatProvider,System.String,System.Object[])"/> before appending the log entry.
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.LogWithSource.Debug(System.FormattableString@)">
+            <inheritdoc cref="F:Theobald.Logging.LogLevel.Debug"/>
+        </member>
+        <member name="M:Theobald.Logging.LogWithSource.Inform(System.FormattableString@)">
+            <inheritdoc cref="F:Theobald.Logging.LogLevel.Info"/>
+        </member>
+        <member name="M:Theobald.Logging.LogWithSource.Warn(System.FormattableString@)">
+            <inheritdoc cref="F:Theobald.Logging.LogLevel.Warning"/>
+        </member>
+        <member name="M:Theobald.Logging.LogWithSource.Err(System.FormattableString@)">
+            <inheritdoc cref="F:Theobald.Logging.LogLevel.Error"/>
+        </member>
+        <member name="M:Theobald.Logging.LogWithSource.Err(System.FormattableString@,System.Exception)">
+            <inheritdoc cref="F:Theobald.Logging.LogLevel.Error"/>
+        </member>
+        <member name="M:Theobald.Logging.LogWithSource.Err(System.Exception)">
+            <inheritdoc cref="F:Theobald.Logging.LogLevel.Error"/>
+        </member>
+        <member name="T:Theobald.Logging.NullLogger">
+            <summary>
+            A logger that spirits away all entries into the endless void of nothingness.
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.NullLogger.Log(System.DateTime@,System.String@,Theobald.Logging.LogLevel@,System.String@)">
+            <summary>
+            Everything that is passed to this method will be ignored.
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.NullLogger.Log(System.String@,System.Exception@,System.String@)">
+            <summary>
+            Don't like exceptions? Just pass them in here and they will be gone.
+            </summary>
+        </member>
+        <member name="M:Theobald.Logging.NullLogger.Start(System.DateTime@)">
+            <summary>
+            This method is irrelevant.
             </summary>
         </member>
         <member name="M:Theobald.SyntacticSugar.ObjectExtensions.ThrowIfNull(System.Object,System.String)">
@@ -1746,6 +2029,14 @@
             or returns <paramref name="value"/>
             </summary>
         </member>
+        <member name="M:Theobald.SyntacticSugar.ObjectExtensions.IntoEnumerable``1(``0)">
+            <summary>
+            
+            </summary>
+            <param name="item"></param>
+            <typeparam name="T"></typeparam>
+            <returns>An Enumerable, which only yields this one item.</returns>
+        </member>
         <member name="M:Theobald.SyntacticSugar.StringExtensions.ThrowIfNullOrWhiteSpace(System.String,System.String)">
             <summary>
             Throws an <see cref="T:System.ArgumentException"/>
@@ -1758,18 +2049,65 @@
             if <paramref name="value"/> is not <code>null</code> or whitespace
             </summary>
         </member>
-        <member name="T:Theobald.Xml.SlimXmlReader">
+        <member name="T:Theobald.Win32.ConsoleApi2">
             <summary>
-            Lightweight XML reader, that is able to process somewhat invalid XML
-            (e. g. unescaped control characters in content)
+            consoleapi2.h
             </summary>
         </member>
-        <member name="M:Theobald.Xml.SlimXmlReader.ReadElementString">
+        <member name="T:Theobald.Win32.HandleApi">
             <summary>
-            Assumes current position is <see cref="F:Theobald.Xml.SlimXmlReadResult.StartTag"/>.
-            Expects the content of the element to contain no child elements.
-            Returns the unescaped content and advances the current position to
-            <see cref="F:Theobald.Xml.SlimXmlReadResult.EndTag"/>.
+            handleapi.h
+            </summary>
+        </member>
+        <member name="T:Theobald.Win32.MinWinBase">
+            <summary>
+            minwinbase.h
+            </summary>
+        </member>
+        <member name="T:Theobald.Win32.ProcessEnv">
+            <summary>
+            ProcessEnv.h
+            </summary>
+        </member>
+        <member name="T:Theobald.Win32.ProcessThreadsApi">
+            <summary>
+            processthreadsapi.h
+            </summary>
+        </member>
+        <member name="T:Theobald.Win32.WinBase">
+            <summary>
+            WinBase.h
+            </summary>
+        </member>
+        <member name="F:Theobald.Win32.WinBase.ProcessCreationFlags.CREATE_NO_WINDOW">
+            <summary>
+            The process is a console application that is being run without a console window. Therefore, the console handle for the application is not set.
+            This flag is ignored if the application is not a console application, or if it is used with either CREATE_NEW_CONSOLE or DETACHED_PROCESS.
+            </summary>
+        </member>
+        <member name="T:Theobald.Win32.WinError">
+            <summary>
+            winerror.h
+            </summary>
+        </member>
+        <member name="F:Theobald.Win32.WinError.ErrorCode.ERROR_TIMEOUT">
+            <summary>
+            This operation returned because the timeout period expired.
+            </summary>
+        </member>
+        <member name="T:Theobald.Win32.WinNt">
+            <summary>
+            winnt.h
+            </summary>
+        </member>
+        <member name="T:Theobald.Win32.WinUser">
+            <summary>
+             WinUser.h
+            </summary>
+        </member>
+        <member name="M:Theobald.Win32.WaitRegistration.Add(System.Threading.WaitHandle@,System.Action)">
+            <summary>
+            Monitors the wait handle and performs an action, when the handle receives a signal
             </summary>
         </member>
     </members>
