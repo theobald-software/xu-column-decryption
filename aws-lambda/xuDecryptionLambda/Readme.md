@@ -3,14 +3,19 @@ This template was created with the following command:
 ```
 dotnet new serverless.EmptyServerless -n xuDecryptionLambda
 ```
+The project template can be found [here](https://dotnetnew.azurewebsites.net/template/Amazon.Lambda.Templates/AWS.Lambda.Serverless.Empty.CSharp).
 
-It is meant to be a starting point for your own lambda function for decrypting the XU generated encrypted data. The lambda part of this project is basically the vanilla template and thus might not be configured correctly to match your security or other guidelines. Please **review the serverless.template file before deployment to avoid putting your or your organizations data at risk**.
+It is meant to be a starting point for your own lambda function for decrypting the XU generated encrypted data.
+The lambda part of this project is basically the vanilla template and thus will most likely not be configured correctly to match your security or other guidelines.
+Please **review the serverless.template file before deployment to avoid putting your or your organizations data at risk**.
 
-You may edit the template to customize the function or add more functions and other resources needed by your application.
+Edit the template to customize the function or add more functions and other resources needed by your application.
+
+Deployment might require additional setup steps on the users machine.
 
 # Build and Deployment
 
-You can deploy your application using [.NETCore](https://dotnet.microsoft.com/download/dotnet-core/3.1) in combination with the [Amazon.Lambda.Tools Global Tool](https://github.com/aws/aws-extensions-for-dotnet-cli#aws-lambda-amazonlambdatools) from the command line.
+You can deploy your application using [.NET6.0](https://dotnet.microsoft.com/download/dotnet/6.0) in combination with the [Amazon.Lambda.Tools Global Tool](https://github.com/aws/aws-extensions-for-dotnet-cli#aws-lambda-amazonlambdatools) from the command line.
 
 Install Amazon.Lambda.Tools Global Tools if not already installed.
 ```
@@ -22,7 +27,7 @@ If already installed check if new version is available.
 dotnet tool update -g Amazon.Lambda.Tools
 ```
 
-Deploy the application in interactive mode (runtime is netcoreapp3.1)
+Deploy the application in interactive mode (runtime is dotnet6)
 ```
 dotnet lambda deploy-function
 ```
@@ -33,6 +38,13 @@ dotnet lambda deploy-function -cfg aws-lambda-tools-defaults.json
 ```
 Note that the configuration file, which is provided with the repository is only a sample, which will not work with your environment.
 Modify the file to fit your needs before deploying.
+The profile files contents look like this:
+
+```
+[default]
+aws_access_key_id = <access-key-id>
+aws_secret_access_key = <secret-key>
+```
 
 # Setup
 

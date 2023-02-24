@@ -1,4 +1,4 @@
-# xu-coloumn-decryption
+# xu-column-decryption
 A collection of minimalistic sample apps to decrypt data which was extracted via Xtract Universal using the column encryption feature. Xtract Universal currently only supports the CSV Fileformat.
 Note, that the default delimiter is ';' to match the Xtract Universal cloud destinations. The file CSV destination has ',' set as default. Set the delimiter in your file CSV destination to ';' to avoid confusion.
 
@@ -16,9 +16,9 @@ This sample shows how to decrypt data which was extracted to a CSV Flat File des
 
 **Every project contains a Readme.md file with further instructions regarding the projects requirements for building and deployment.**
 # Technical Information
-The sample apps use .NETCore 3.1 as their runtime and are therefore platform independent. They are **not** configured to create self-contained binaries. Running them requires the .NETCore runtime (at least version 3.1) to be installed.
-You can download the [.NET Core SDK here](https://dotnet.microsoft.com/download/dotnet-core/3.1).
-Dependencies for the encryption are the Theobald.Decryption.Common library (dotnetcore3.1) and the Theobald.Common library (NETStandard2.0). They only build on the respective dotnet frameworks and do not include any third-party libraries.
+The sample apps use .NET6.0 as their runtime and are therefore platform independent. They are **not** configured to create self-contained binaries. Running them requires the .NET runtime (at least version 6.0) to be installed.
+You can download the [.NET6.0 SDK here](https://dotnet.microsoft.com/download/dotnet).
+Dependencies for the encryption are the Theobald.Decryption.Common library (.NET6.0) and the Theobald.Common library (NETStandard2.0). They only build on the respective dotnet frameworks and do not include any third-party libraries.
 The two libraries are located in the "Theobald Software" directory and are referenced by the projects by default.
 
 The interface for the decrypting applications is specifically designed to leave the user in control over all sensitive cryptographic data. That means that the code which actually decrypts the data is open source and part of the users application. However, keep in mind that changing the logic of this very code might result in the decryption process to fail.
