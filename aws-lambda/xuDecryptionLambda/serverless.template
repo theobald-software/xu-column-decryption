@@ -10,6 +10,7 @@
         "Runtime": "dotnet6",
         "CodeUri": "",
         "Timeout": 30,
+        "MemorySize": 128,
       }
     }
   }

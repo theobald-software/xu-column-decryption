@@ -3,10 +3,15 @@ This template was created with the following command:
 ```
 dotnet new serverless.EmptyServerless -n xuDecryptionLambda
 ```
+The project template can be found [here](https://dotnetnew.azurewebsites.net/template/Amazon.Lambda.Templates/AWS.Lambda.Serverless.Empty.CSharp).
 
-It is meant to be a starting point for your own lambda function for decrypting the XU generated encrypted data. The lambda part of this project is basically the vanilla template and thus might not be configured correctly to match your security or other guidelines. Please **review the serverless.template file before deployment to avoid putting your or your organizations data at risk**.
+It is meant to be a starting point for your own lambda function for decrypting the XU generated encrypted data.
+The lambda part of this project is basically the vanilla template and thus will most likely not be configured correctly to match your security or other guidelines.
+Please **review the serverless.template file before deployment to avoid putting your or your organizations data at risk**.
 
-You may edit the template to customize the function or add more functions and other resources needed by your application.
+Edit the template to customize the function or add more functions and other resources needed by your application.
+
+Deployment might require additional setup steps on the users machine.
 
 # Build and Deployment
 
@@ -33,6 +38,13 @@ dotnet lambda deploy-function -cfg aws-lambda-tools-defaults.json
 ```
 Note that the configuration file, which is provided with the repository is only a sample, which will not work with your environment.
 Modify the file to fit your needs before deploying.
+The profile files contents look like this:
+
+```
+[default]
+aws_access_key_id = <access-key-id>
+aws_secret_access_key = <secret-key>
+```
 
 # Setup
 
