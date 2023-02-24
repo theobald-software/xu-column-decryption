@@ -11,7 +11,7 @@ It is meant to be a starting point for your own azure function for decrypting th
 
 Using Azure functions has the following requirements:
 * An Azure account with an active subscription and a resource group
-* An installation of the [.NET Core SDK 3.1](https://dotnet.microsoft.com/download/dotnet-core/3.1)
+* An installation of the [.NET 6.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 * The [Azure Functions Core Tools](https://www.npmjs.com/package/azure-functions-core-tools)
 
 [-Source](https://docs.microsoft.com/en-us/azure/azure-functions/create-first-function-cli-csharp?tabs=azure-cli%2Cbrowser#configure-your-local-environment)
@@ -19,14 +19,14 @@ Using Azure functions has the following requirements:
 We used the windows installers of each of the tools
 
 Before integrating the Function app into the Azure environment, you have to specify the names of the target and source container in your Azure Storage account. To do so open the `local.settings.json` and modify the values for the respective keys. If you do not use a connection string, please also delete the check for it in the functions code at `line 72`.
-For us the deployment of the environment variables did not work reliably. It may be necessary to manually add the key-value pairs in the function app in the configuration.
+For us the deployment of the environment variables did not work reliably. *It may be necessary to manually add the key-value pairs in the function app in the configuration*.
 The app assumes that the private key file is located in the target container. If your infrastructure is different, please adjust the code according to your needs.
 You also have to specify the source container in the string of the BlobTrigger on `line 45`. Replace \<yourStorageBlob> with the path of the container which is targeted by the XU upload.
 
-## Creating an Azure Function slot.
-If you do **not** already have a slot for your Azure Function, create one by using the command:
+## Creating an Azure Function App slot.
+If you do **not** already have a slot for your Azure Function, create one by using the command (requires [azure cli](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli-windows?tabs=azure-cli)):
 ```
-az functionapp create --resource-group <your resource group> --consumption-plan-location <your location, e.g. westeurope> --runtime dotnet --functions-version 3 --name <your function name> --storage-account <your storage account>
+az functionapp create --resource-group <your resource group> --consumption-plan-location <your location, e.g. westeurope> --runtime dotnet --functions-version 4 --name <your function name> --storage-account <your storage account>
 ```
 where \<your function name> is the name of the functions slot in Azure. This name will be important for the deployment command in the next step.
 
@@ -42,7 +42,7 @@ func azure functionapp publish <your function name>
 to build, publish and deploy the published app to the function slot.
 
 ## View the logs
-To view the near real-time log stream use:
+To view the log stream use:
 ```
 func azure functionapp logstream <your function name>
 ```

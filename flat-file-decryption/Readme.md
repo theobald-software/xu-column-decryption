@@ -7,7 +7,7 @@ This template was created with the following command:
 dotnet new console -n FileDecryption
 ```
 
-Running the application requires the .NET6.0 and higher SDK or runtime. You can download the software [here](https://dotnet.microsoft.com/download/dotnet)
+Running the application requires the .NET6.0 and higher SDK. You can download the software [here](https://dotnet.microsoft.com/download/dotnet/6.0)
 
 # Build and Deployment
 You can build the code running
